@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed } = require("discord.js");
 const { QueryType } = require("discord-player");
 
 module.exports= {
@@ -15,11 +14,8 @@ module.exports= {
     async execute(interaction) {
         if (!interaction.member.voice.channel) { return await interaction.reply("get in voice and try again") }
 
-        const queue = await interaction.client.player.createQueue(interaction.guild);
-
-        if (!queue.connection) await queue.connect(interaction.member.voice.channel)
-
         if (interaction.options.getSubcommand() === "song") {
+
             let url = interaction.options.getString("url");
 
             const result = await interaction.client.player.search(url, {
@@ -32,6 +28,17 @@ module.exports= {
             
             const song = result.tracks[0];
 
+            let queue = "";
+
+            if (await interaction.client.player.getQueue(interaction.guild)) {
+                queue = await interaction.client.player.getQueue(interaction.guild);
+            } else {
+                console.log("queue not exist")
+                queue = await interaction.client.player.createQueue(interaction.guild);
+            }
+    
+            if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+            
             await queue.addTrack(song);
 
             if (!queue.playing) await queue.play();
