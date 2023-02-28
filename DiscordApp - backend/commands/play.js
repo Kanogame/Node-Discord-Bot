@@ -1,5 +1,9 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { QueryType } = require("discord-player");
+const path = require('node:path');
+const serverPath = path.join(__dirname, 'handleServer.js');
+
+const handleServer = require("../handleServer");
 
 module.exports= {
     data: new SlashCommandBuilder()
@@ -33,7 +37,9 @@ module.exports= {
             if (!queue) {
                 console.log("queue not exist")
                 queue = await interaction.client.player.createQueue(interaction.guild);
+                handleServer.startServer("asd");
             }
+            handleServer.refreshList(queue.tracks);
     
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);
             
