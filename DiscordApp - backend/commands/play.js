@@ -28,11 +28,9 @@ module.exports= {
             
             const song = result.tracks[0];
 
-            let queue = "";
+            let queue = interaction.client.player.getQueue(interaction.guild);
 
-            if (await interaction.client.player.getQueue(interaction.guild)) {
-                queue = await interaction.client.player.getQueue(interaction.guild);
-            } else {
+            if (!queue) {
                 console.log("queue not exist")
                 queue = await interaction.client.player.createQueue(interaction.guild);
             }
@@ -44,8 +42,6 @@ module.exports= {
             if (!queue.playing) await queue.play();
 
             await interaction.reply(`**[${song.title}](${song.url})** has been added to the Queue`);
-            await interaction.reply(song.thumbnail);
-            await interaction.reply({ text: `Duration: ${song.duration}`});
 		}
     }
 }
