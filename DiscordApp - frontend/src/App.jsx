@@ -32,16 +32,31 @@ class App extends Component {
         }
     }
 
+    async handleclick() {
+        const resp = await fetch("http://localhost:13532/links/get", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' 
+            },
+            body: "POST testing",
+        });
+        let text = await resp.json();
+        alert(text);
+    }
+
     render() {
         const result = [];
         for (let music of this.state.musiclist) {
             const musicCard = (
+                <>
                 <Card>
                     <div>{music.id}</div>
                     <div>{music.title}</div>
                     <div>{music.author}</div>
                     <div>{music.url}</div>
                 </Card>
+                <button onClick={this.handleclick()}>Add</button>
+                </>
             );
             result.push(musicCard);
         }

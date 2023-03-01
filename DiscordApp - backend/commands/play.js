@@ -33,12 +33,14 @@ module.exports= {
             const song = result.tracks[0];
 
             let queue = interaction.client.player.getQueue(interaction.guild);
-
+            console.log("queue is defined now");
+            
             if (!queue) {
                 console.log("queue not exist")
                 queue = await interaction.client.player.createQueue(interaction.guild);
                 handleServer.startServer("asd");
             }
+            console.log("refreshing list!");
             handleServer.refreshList(queue.tracks);
     
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);

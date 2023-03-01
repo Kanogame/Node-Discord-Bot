@@ -21,3 +21,8 @@ async function startServer(link) {
     });
 }
 
+app.post("/", (req, res) => {
+    console.log(req + "POST TEST");
+    res.send("success");
+})
+
