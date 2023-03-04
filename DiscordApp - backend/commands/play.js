@@ -41,6 +41,7 @@ module.exports= {
                 handleServer.startServer("asd");
             }
             console.log("refreshing list!");
+            console.log(queue)
             handleServer.refreshList(queue.tracks);
     
             if (!queue.connection) await queue.connect(interaction.member.voice.channel);

@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection,  GatewayIntentBits } = require('discord.js');
+const { VoiceConnectionStatus } = require('@discordjs/voice');
 const { Player } = require("discord-player")
 const { token } = require('./config.json');
 
@@ -28,7 +29,36 @@ client.player = new Player(client, {
         highWaterMark: 1 << 25
     }
 })
+/*
+client.player.events.on('connection', (queue) => {
+	queue.dispatcher.voiceConnection.on('stateChange', (oldState, newState) => {
+		const oldNetworking = Reflect.get(oldState, 'networking');
+		const newNetworking = Reflect.get(newState, 'networking');
 
+		const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
+		const newUdp = Reflect.get(newNetworkState, 'udp');
+		clearInterval(newUdp?.keepAliveInterval);
+		}
+
+		oldNetworking?.off('stateChange', networkStateChangeHandler);
+		newNetworking?.on('stateChange', networkStateChangeHandler);
+	});
+});
+*/
+client.player.on('connectionCreate', (queue) => {
+	queue.connection.voiceConnection.on('stateChange', (oldState, newState) => {
+	const oldNetworking = Reflect.get(oldState, 'networking');
+	const newNetworking = Reflect.get(newState, 'networking');
+
+	const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
+		const newUdp = Reflect.get(newNetworkState, 'udp');
+		clearInterval(newUdp?.keepAliveInterval);
+	}
+
+	oldNetworking?.off('stateChange', networkStateChangeHandler);
+	newNetworking?.on('stateChange', networkStateChangeHandler);
+	});
+});
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
