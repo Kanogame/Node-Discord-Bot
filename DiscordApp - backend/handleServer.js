@@ -3,9 +3,9 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
+module.exports = { refreshList, startServer, getServerStatus }
 
-const list = [];
-module.exports = { refreshList, startServer }
+let server = false;
 
 async function refreshList(list) {
     list = list;
@@ -15,9 +15,14 @@ async function refreshList(list) {
     });
 }
 
-async function startServer(link) {
+function getServerStatus() {
+    return server;
+}
+
+async function startServer() {
     await app.listen(13532, () => {
         console.log("Сервер запущен на порту 13532");
+        server = true;
     });
 }
 

@@ -1,7 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { QueryType } = require("discord-player");
-const path = require('node:path');
-const serverPath = path.join(__dirname, 'handleServer.js');
 
 const handleServer = require("../handleServer");
 
@@ -18,39 +16,27 @@ module.exports= {
     async execute(interaction) {
         if (!interaction.member.voice.channel) { return await interaction.reply("get in voice and try again") }
 
+        const player = interaction.client.player;
+
         if (interaction.options.getSubcommand() === "song") {
-
-            let url = interaction.options.getString("url");
-
-            const result = await interaction.client.player.search(url, {
-                requestedBy: interaction.user,
-                searchEngine: QueryType.YOUTUBE_VIDEO
-            });
-
-            if (result.tracks.length === 0)
-                return interaction.reply("No results");
-            
-            const song = result.tracks[0];
-
-            let queue = interaction.client.player.getQueue(interaction.guild);
-            console.log("queue is defined now");
-            
-            if (!queue) {
-                console.log("queue not exist")
-                queue = await interaction.client.player.createQueue(interaction.guild);
-                handleServer.startServer("asd");
+            const query = interaction.options.getString('url', true);
+            try {
+                player.play(interaction.member.voice.channel, query, {
+                    nodeOptions: {
+                        metadata: interaction
+                    }
+                });
+            } catch (e) {
+                return interaction.followUp(`Something went wrong: ${e}`);
             }
-            console.log("refreshing list!");
-            console.log(queue)
-            handleServer.refreshList(queue.tracks);
-    
-            if (!queue.connection) await queue.connect(interaction.member.voice.channel);
-            
-            await queue.addTrack(song);
 
-            if (!queue.playing) await queue.play();
-
-            await interaction.reply(`**[${song.title}](${song.url})** has been added to the Queue`);
+            if (!handleServer.getServerStatus())
+            {
+                handleServer.startServer();
+            }
+            console.log(player.nodes.get(interaction.guildid).tracks);
+            //handleServer.refreshList(player.nodes.get(1023567810972102746));
+            await interaction.reply("DONE!");
 		}
     }
 }

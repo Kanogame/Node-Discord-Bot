@@ -1,8 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection,  GatewayIntentBits } = require('discord.js');
-const { VoiceConnectionStatus } = require('@discordjs/voice');
-const { Player } = require("discord-player")
+const { Player } = require('discord-player');
 const { token } = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
@@ -23,42 +22,14 @@ for (const file of commandFiles) {
 	}
 }
 
-client.player = new Player(client, {
-    ytdlOptions: {
-        quality: "highestaudio",
-        highWaterMark: 1 << 25
-    }
-})
-/*
-client.player.events.on('connection', (queue) => {
-	queue.dispatcher.voiceConnection.on('stateChange', (oldState, newState) => {
-		const oldNetworking = Reflect.get(oldState, 'networking');
-		const newNetworking = Reflect.get(newState, 'networking');
+const player = new Player(client);
 
-		const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
-		const newUdp = Reflect.get(newNetworkState, 'udp');
-		clearInterval(newUdp?.keepAliveInterval);
-		}
+client.player = player;
 
-		oldNetworking?.off('stateChange', networkStateChangeHandler);
-		newNetworking?.on('stateChange', networkStateChangeHandler);
-	});
+player.events.on('playerStart', (queue, track) => {
+    queue.metadata.channel.send(`Started playing **${track.title}**!`);
 });
-*/
-client.player.on('connectionCreate', (queue) => {
-	queue.connection.voiceConnection.on('stateChange', (oldState, newState) => {
-	const oldNetworking = Reflect.get(oldState, 'networking');
-	const newNetworking = Reflect.get(newState, 'networking');
 
-	const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
-		const newUdp = Reflect.get(newNetworkState, 'udp');
-		clearInterval(newUdp?.keepAliveInterval);
-	}
-
-	oldNetworking?.off('stateChange', networkStateChangeHandler);
-	newNetworking?.on('stateChange', networkStateChangeHandler);
-	});
-});
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
