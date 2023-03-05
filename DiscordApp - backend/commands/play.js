@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { QueryType } = require("discord-player");
+const { Player } = require('discord-player');
 
 const handleServer = require("../handleServer");
 
@@ -20,6 +21,7 @@ module.exports= {
 
         if (interaction.options.getSubcommand() === "song") {
             const query = interaction.options.getString('url', true);
+            const queue = interaction.client.player.nodes.get("1023567810972102746");
             try {
                 player.play(interaction.member.voice.channel, query, {
                     nodeOptions: {
@@ -34,8 +36,11 @@ module.exports= {
             {
                 handleServer.startServer();
             }
-            console.log(player.nodes.get(interaction.guildid).tracks);
-            //handleServer.refreshList(player.nodes.get(1023567810972102746));
+            if (queue)
+            {
+                handleServer.refreshList(queue.tracks);
+            }
+            console.log(queue.currentTrack);
             await interaction.reply("DONE!");
 		}
     }
