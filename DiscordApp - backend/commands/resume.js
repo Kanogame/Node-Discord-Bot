@@ -5,15 +5,15 @@ module.exports = {
         .setName("resume")
         .setDescription("Resume the current song"),
 		async execute(interaction) {
-		const queue = interaction.client.player.getQueue(interaction.guildId);
+		const queue = interaction.client.player.nodes.get(interaction.guildid);
 
         if (!queue) {
 			await interaction.reply("There are no songs in the queue");
 			return;
 		}
 
-		const currentSong = queue.current;
-        queue.setPaused(false);
+		const currentSong = queue.currentTrack;
+        queue.currentSong.resume();
         await interaction.reply(currentSong.title + " has been resumed.")
 	},
 }
