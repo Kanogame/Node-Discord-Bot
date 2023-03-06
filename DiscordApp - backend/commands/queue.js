@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders")
+const { useQueue } = require('discord-player');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -6,22 +7,12 @@ module.exports = {
         .setDescription("shows first 10 songs in the queue"),
 
     async execute(interaction) {
-        const queue = interaction.client.player.getQueue(interaction.guildId)
-
-        if (!queue || !queue.playing)
-        {
-            await interaction.reply("There are no songs in the queue");
-            return;
-        }
-
-        const queueString = queue.tracks.slice(0, 10).map((song, i) => {
-            return `${i}) [${song.duration}]\` ${song.title} - <@${song.requestedBy.id}>`
-        }).join("\n")
-
-        // Get the current song
-        const currentSong = queue.current
-
-        await interaction.reply((currentSong ? `\`[${currentSong.duration}]\` ${currentSong.title} - <@${currentSong.requestedBy.id}>` : "None") +
-                        `\n\n**Queue**\n${queueString}`)
+        queue = useQueue(interaction.guild.id);
+        const tracks = queue.tracks.map((track, idx) => {`**${++idx})** [${track.title}](${track.url})`});
+        console.log(tracks);
+            for (let i = 0; i < tracks.length; i++)
+            {
+                await interaction.reply(tracks[i]);
+            }
     }
 }

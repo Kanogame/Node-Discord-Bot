@@ -17,13 +17,13 @@ module.exports= {
     async execute(interaction) {
         if (!interaction.member.voice.channel) { return await interaction.reply("get in voice and try again") }
 
-        const player = interaction.client.player;
+        const player = Player.singleton(interaction.client);
 
         if (interaction.options.getSubcommand() === "song") {
+            const queue = player.nodes.create(interaction.guildId);
             const query = interaction.options.getString('url', true);
-            const queue = useQueue(interaction.guildid);
             try {
-                player.play(interaction.member.voice.channel, query, {
+                await player.play(interaction.member.voice.channel, query, {
                     nodeOptions: {
                         metadata: interaction
                     }
@@ -31,16 +31,15 @@ module.exports= {
             } catch (e) {
                 return interaction.reply(`Something went wrong: ${e}`);
             }
-
+            
             if (!handleServer.getServerStatus())
             {
                 handleServer.startServer();
             }
             if (queue)
             {
-                handleServer.refreshList(queue.tracks);
+                //handleServer.refreshList(player.queue.tracks);
             }
-            await console.log(queue.currentTrack);
             await interaction.reply("DONE!");
 		}
     }
