@@ -9,10 +9,7 @@ module.exports = {
     async execute(interaction) {
         queue = useQueue(interaction.guild.id);
         const tracks = queue.tracks.map((track, idx) => {`**${++idx})** [${track.title}](${track.url})`});
+        console.log(queue.tracks);
         console.log(tracks);
-            for (let i = 0; i < tracks.length; i++)
-            {
-                await interaction.reply(tracks[i]);
-            }
     }
 }
