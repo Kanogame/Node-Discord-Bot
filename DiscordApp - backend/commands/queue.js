@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders")
-const { useQueue } = require('discord-player');
+const { useQueue, useMasterPlayer } = require('discord-player');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -7,9 +7,13 @@ module.exports = {
         .setDescription("shows first 10 songs in the queue"),
 
     async execute(interaction) {
-        queue = useQueue(interaction.guild.id);
-        const tracks = queue.tracks.map((track, idx) => {`**${++idx})** [${track.title}](${track.url})`});
-        console.log(queue.tracks);
-        console.log(tracks);
+        const queue = useQueue(interaction.guildId);
+        const tracks = queue.tracks.map((track, idx) => {return `**${++idx})** [${track.title}](${track.url})`});
+        let reply = "";
+
+        for(const track of tracks) {
+            reply += track + "\n";
+        }
+        interaction.reply(reply);
     }
 }

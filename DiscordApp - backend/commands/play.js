@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { QueryType } = require("discord-player");
-const { useMasterPlayer, useQueue } = require('discord-player');
+const { Player, useQueue } = require('discord-player');
 
 const handleServer = require("../handleServer");
 
@@ -17,7 +16,7 @@ module.exports= {
     async execute(interaction) {
         if (!interaction.member.voice.channel) { return await interaction.reply("get in voice and try again") }
 
-        const player = useMasterPlayer();
+        const player = Player.singleton(interaction.client)
 
         if (interaction.options.getSubcommand() === "song") {
             const queue = player.nodes.create(interaction.guildId);
@@ -31,7 +30,7 @@ module.exports= {
             } catch (e) {
                 return interaction.reply(`Something went wrong: ${e}`);
             }
-            
+
             if (!handleServer.getServerStatus())
             {
                 handleServer.startServer();
