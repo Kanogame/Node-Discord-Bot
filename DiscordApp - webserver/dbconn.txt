@@ -1,0 +1,1 @@
+postgresql://kano:wasd@localhost:5432/todos?sslmode=disable

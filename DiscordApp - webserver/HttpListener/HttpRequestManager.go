@@ -2,6 +2,8 @@ package httplistener
 
 import (
 	"fmt"
+	dbutils "main/DButils"
+	utils "main/utils"
 	"net/http"
 	"strconv"
 )
@@ -18,6 +20,11 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 
 		if path == "/tracks" {
 			token := r.URL.Query().Get("token")
+			pass := r.URL.Query().Get("pass")
+			var user utils.User
+			user.token = token
+			user.passhash = pass
+			dbutils.GetQueueByToken(dbutils.CreateNewConnection(), user)
 			fmt.Println(token)
 		}
 	}
