@@ -2,8 +2,8 @@ package httplistener
 
 import (
 	"fmt"
-	dbutils "main/DButils"
-	utils "main/utils"
+	databaseHandler "main/DatabaseHandler"
+	utils "main/Utils"
 	"net/http"
 	"strconv"
 )
@@ -22,9 +22,9 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 			token := r.URL.Query().Get("token")
 			pass := r.URL.Query().Get("pass")
 			var user utils.User
-			user.token = token
-			user.passhash = pass
-			dbutils.GetQueueByToken(dbutils.CreateNewConnection(), user)
+			user.Token = token
+			user.Passhash = pass
+			databaseHandler.GetQueueByToken(databaseHandler.CreateNewConnection(), user)
 			fmt.Println(token)
 		}
 	}

@@ -1,6 +1,6 @@
-package utils
+package Utils
 
 type User struct {
-	token    string
-	passhash string
+	Token    string
+	Passhash string
 }

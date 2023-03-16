@@ -5,8 +5,11 @@ CREATE TABLE SessionTable (
     queueId      INT            NOT NULL UNIQUE);
 
 --@block
-SELECT * FROM SessionTable
-
+SELECT * FROM SessionTable;
 --@block
+
 INSERT INTO SessionTable (token,  tokenPasswrd, queueId)
-VALUES ('aurguhsfuibdifo', 'auojsdifo', 1);
+    VALUES ('aurguhsfuibdifo1', 'auojsdifo1', 2);
+
+SELECT queueid, tokenpasswrd FROM SessionTable 
+WHERE token = 'aurguhsfuibdifo1';

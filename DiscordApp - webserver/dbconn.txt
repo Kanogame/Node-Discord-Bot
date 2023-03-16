@@ -1,1 +1,1 @@
-postgresql://kano:wasd@localhost:5432/todos?sslmode=disable
+postgres://postgres:postgrespw@localhost:32768/postgres?sslmode=disable
