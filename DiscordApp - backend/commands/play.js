@@ -15,11 +15,16 @@ module.exports= {
         ),
     async execute(interaction) {
         if (!interaction.member.voice.channel) { return await interaction.reply("get in voice and try again") }
-
+        await interaction.deferReply({
+            ephemeral: true,
+        });
         const player = Player.singleton(interaction.client)
 
         if (interaction.options.getSubcommand() === "song") {
             const queue = player.nodes.create(interaction.guildId);
+            if (queue.currentTrack === null) {
+                interaction.followUp("token");
+            }
             const query = interaction.options.getString('url', true);
             try {
                 await player.play(interaction.member.voice.channel, query, {
@@ -39,7 +44,7 @@ module.exports= {
             {
                 handleServer.refreshList(useQueue(interaction.guildId).tracks);
             }
-            await interaction.reply("DONE!");
+            await interaction.followUp("DONE!");
 		}
     }
 }
