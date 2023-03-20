@@ -1,9 +1,11 @@
 const express = require("express");
 const cors = require("cors");
+const axios = require('axios/dist/node/axios.cjs');
+const { url } = require("../config.json");
 
 const app = express();
 app.use(cors());
-module.exports = { refreshList, startServer, getServerStatus }
+module.exports = { refreshList, startServer, getServerStatus, newToken }
 
 let server = false;
 
@@ -26,8 +28,15 @@ async function startServer() {
     });
 }
 
-app.post("/", (req, res) => {
-    console.log(req + "POST TEST");
-    res.send("success");
-})
+async function newToken(token, password, guildId) {
+    axios.post(url, { 
+            token: token, 
+            password: password, 
+            guildId: guildId },  
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+}
 
