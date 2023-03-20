@@ -7,5 +7,5 @@ type User struct {
 type NewTokenJSON struct {
 	token    string
 	password string
-	guildId  int
+	guildId  string
 }

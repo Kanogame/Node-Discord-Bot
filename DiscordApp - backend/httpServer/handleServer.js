@@ -29,10 +29,12 @@ async function startServer() {
 }
 
 async function newToken(token, password, guildId) {
-    axios.post(url, { 
-            token: token, 
-            password: password, 
-            guildId: guildId },  
+    const data = { 
+        token: token, 
+        password: password, 
+        guildId: guildId };
+    console.log(data);
+    axios.post(url, data,  
         {
             headers: {
                 'Content-Type': 'application/json'

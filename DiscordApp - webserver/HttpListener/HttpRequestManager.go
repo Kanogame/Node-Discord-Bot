@@ -44,5 +44,5 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(post)
+	fmt.Println(post.token)
 }
