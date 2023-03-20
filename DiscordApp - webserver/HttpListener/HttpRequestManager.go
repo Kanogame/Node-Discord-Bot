@@ -1,7 +1,9 @@
 package httplistener
 
 import (
+	"encoding/json"
 	"fmt"
+	"io"
 	databaseHandler "main/DatabaseHandler"
 	utils "main/Utils"
 	"net/http"
@@ -27,5 +29,20 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 			databaseHandler.GetQueueByToken(databaseHandler.CreateNewConnection(), user)
 			fmt.Println(token)
 		}
+	} else if r.Method == "POST" {
+		PostHandler(w, r)
 	}
+}
+
+func PostHandler(w http.ResponseWriter, r *http.Request) {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		panic(err)
+	}
+	var post utils.NewTokenJSON
+	err = json.Unmarshal(body, &post)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(post)
 }

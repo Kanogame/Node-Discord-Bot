@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const { Player, useQueue } = require('discord-player');
 
 const handleServer = require("../httpServer/handleServer");
-const { randomSrting } = require("../utils/randomSrting");
+const { randomString } = require("../utils/randomSrting");
 
 module.exports= {
     data: new SlashCommandBuilder()
@@ -24,8 +24,8 @@ module.exports= {
         if (interaction.options.getSubcommand() === "song") {
             const queue = player.nodes.create(interaction.guildId);
             if (queue.currentTrack === null) {
-                const token = randomSrting(15);
-                const password = randomSrting(20);
+                const token = randomString(15);
+                const password = randomString(20);
                 interaction.followUp("token: " + token, "password: " + password);
                 handleServer.newToken(token, password, interaction.guildId);
             }
