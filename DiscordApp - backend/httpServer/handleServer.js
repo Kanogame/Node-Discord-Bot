@@ -29,16 +29,31 @@ async function startServer() {
 }
 
 async function newToken(token, password, guildId) {
+    sendType("newToken");
     const data = { 
-        token: token, 
-        password: password, 
-        guildId: guildId };
+        Token: token, 
+        Password: password, 
+        GuildId: guildId };
     console.log(data);
     axios.post(url, data,  
-        {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+    {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then((responce) => {
+        console.log(responce.data);
+    });    
+}
+
+async function sendType(Type) {
+    axios.post(url, Type, {
+        headers: {
+            'Content-Type': 'text/plain; charset=utf-8'
+        }
+    })
+    .then((responce) => {if (responce !== "success") {
+        console.log("error while sending type")
+    }})
 }
 

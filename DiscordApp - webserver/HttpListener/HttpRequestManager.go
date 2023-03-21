@@ -35,6 +35,7 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(postGetType(w, r))
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
@@ -42,7 +43,21 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	var post utils.NewTokenJSON
 	err = json.Unmarshal(body, &post)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
-	fmt.Println(post.token)
+	fmt.Fprintf(w, "success")
+	fmt.Println(post)
+}
+
+func postGetType(w http.ResponseWriter, r *http.Request) string {
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	res := string(body)
+	if res == "" {
+		panic("NOT SUPPORTED FORMAT")
+	}
+	fmt.Fprintf(w, "success")
+	return res
 }

@@ -5,7 +5,7 @@ type User struct {
 	Passhash string
 }
 type NewTokenJSON struct {
-	token    string
-	password string
-	guildId  string
+	Token    string
+	Password string
+	GuildId  string
 }
