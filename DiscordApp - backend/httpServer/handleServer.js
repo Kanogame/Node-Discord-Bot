@@ -35,7 +35,7 @@ async function newToken(token, password, guildId) {
         Password: password, 
         GuildId: guildId };
     console.log(data);
-    axios.post(url, data,  
+    await axios.post(url, data,  
     {
         headers: {
             'Content-Type': 'application/json'
@@ -47,11 +47,7 @@ async function newToken(token, password, guildId) {
 }
 
 async function sendType(Type) {
-    axios.post(url, Type, {
-        headers: {
-            'Content-Type': 'text/plain; charset=utf-8'
-        }
-    })
+    await axios.post(url, Type)
     .then((responce) => {if (responce !== "success") {
         console.log("error while sending type")
     }})

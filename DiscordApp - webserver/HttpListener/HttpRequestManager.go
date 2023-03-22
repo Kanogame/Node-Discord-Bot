@@ -10,6 +10,8 @@ import (
 	"strconv"
 )
 
+var postType = ""
+
 func StartHttpServer(port int) {
 	handler := http.HandlerFunc(HttpHandler)
 	fmt.Println("RequestManager is lintening on", port)
@@ -35,29 +37,31 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(postGetType(w, r))
+	if postType == "" {
+		postGetType(r)
+		fmt.Fprintf(w, "success")
+	} else {
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			panic(err)
+		}
+		var post utils.NewTokenJSON
+		err = json.Unmarshal(body, &post)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(w, "success")
+		fmt.Println(post)
+		postType = ""
+	}
+}
+
+func postGetType(r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
 	}
-	var post utils.NewTokenJSON
-	err = json.Unmarshal(body, &post)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Fprintf(w, "success")
-	fmt.Println(post)
-}
-
-func postGetType(w http.ResponseWriter, r *http.Request) string {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		fmt.Println(err)
-	}
 	res := string(body)
-	if res == "" {
-		panic("NOT SUPPORTED FORMAT")
-	}
-	fmt.Fprintf(w, "success")
-	return res
+	fmt.Println(res)
+	postType = res
 }
