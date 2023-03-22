@@ -2,7 +2,10 @@ CREATE TABLE SessionTable (
     id SERIAL PRIMARY KEY,
     token        CHAR(24)    NOT NULL UNIQUE,
     tokenPasswrd CHAR(24)    NOT NULL UNIQUE,
-    guildid      INT         NOT NULL UNIQUE);
+    guildid      CHAR(20)    NOT NULL UNIQUE);
+
+--@block
+CREATE DATABASE postgres;
 
 --@block
 SELECT * FROM SessionTable;
@@ -11,7 +14,9 @@ SELECT * FROM SessionTable;
 INSERT INTO SessionTable (token,  tokenPasswrd, guildid)
     VALUES ('aurguhsfuibdifo1', 'auojsdifo1', 2);
 
+--@block
 SELECT queueid, tokenpasswrd FROM SessionTable 
 WHERE token = 'aurguhsfuibdifo1';
 
-DROP DATABASE postgres;
+--@block
+DROP TABLE SessionTable;

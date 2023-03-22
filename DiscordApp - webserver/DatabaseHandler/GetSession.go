@@ -2,6 +2,7 @@ package DatabaseHandler
 
 import (
 	"database/sql"
+	"fmt"
 	utils "main/Utils"
 	"strconv"
 
@@ -31,4 +32,12 @@ func GetQueueByToken(db *sql.DB, user utils.User) int {
 		panic(err)
 	}
 	return queueId
+}
+
+func NewToken(db *sql.DB, data utils.NewTokenJSON) {
+	res, err := db.Exec("INSERT INTO SessionTable (token, tokenPasswrd, guildid) VALUES($1, $2, $3)", data.Token, data.Password, data.GuildId)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(res)
 }

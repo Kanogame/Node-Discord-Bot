@@ -29,6 +29,8 @@ func postNewPlayer(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Fprintf(w, "success")
 	db := databaseHandler.CreateNewConnection()
+	databaseHandler.NewToken(db, post)
+	fmt.Fprintf(w, "success")
+	postType = ""
 }

@@ -38,7 +38,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if postType == "" {
 		postGetType(r)
 		fmt.Fprintf(w, "success")
-	} else if postType == "newToken" {
+	} else {
 		postNewPlayer(w, r)
 	}
 }
