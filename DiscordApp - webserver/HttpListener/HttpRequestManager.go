@@ -1,9 +1,7 @@
 package httplistener
 
 import (
-	"encoding/json"
 	"fmt"
-	"io"
 	databaseHandler "main/DatabaseHandler"
 	utils "main/Utils"
 	"net/http"
@@ -40,28 +38,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if postType == "" {
 		postGetType(r)
 		fmt.Fprintf(w, "success")
-	} else {
-		body, err := io.ReadAll(r.Body)
-		if err != nil {
-			panic(err)
-		}
-		var post utils.NewTokenJSON
-		err = json.Unmarshal(body, &post)
-		if err != nil {
-			panic(err)
-		}
-		fmt.Fprintf(w, "success")
-		fmt.Println(post)
-		postType = ""
+	} else if postType == "newToken" {
+		postNewPlayer(w, r)
 	}
-}
-
-func postGetType(r *http.Request) {
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		panic(err)
-	}
-	res := string(body)
-	fmt.Println(res)
-	postType = res
 }

@@ -8,8 +8,10 @@ CREATE TABLE SessionTable (
 SELECT * FROM SessionTable;
 --@block
 
-INSERT INTO SessionTable (token,  tokenPasswrd, queueId)
+INSERT INTO SessionTable (token,  tokenPasswrd, guildid)
     VALUES ('aurguhsfuibdifo1', 'auojsdifo1', 2);
 
 SELECT queueid, tokenpasswrd FROM SessionTable 
 WHERE token = 'aurguhsfuibdifo1';
+
+DROP DATABASE postgres;
