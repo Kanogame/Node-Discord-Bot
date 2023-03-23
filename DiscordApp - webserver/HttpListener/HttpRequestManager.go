@@ -26,7 +26,9 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	if postType == "" {
 		postGetType(r)
 		fmt.Fprintf(w, "success")
-	} else {
+	} else if postType == "newToken" {
 		postNewPlayer(w, r)
+	} else if postType == "deleteToken" {
+		postRemovePlayer(w, r)
 	}
 }

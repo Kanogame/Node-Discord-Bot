@@ -25,17 +25,9 @@ async function getToken(guildId) {
     return resp.text();
 }
 
-async function deleteToken(token, guildId) {
+async function deleteToken(token) {
     sendType("removeToken");
-    const data = {
-        Token: token,
-        GuildId: guildId
-    }
-    const resp = await axios.post(url, data, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
+    const resp = await axios.post(url, token)
     console.log(resp.text());
 }
 

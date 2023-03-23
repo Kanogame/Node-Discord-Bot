@@ -40,7 +40,7 @@ func postGetGuildId(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	var post utils.GetTokenJSON
+	var post utils.GetGuildJSON
 	err = json.Unmarshal(body, &post)
 	if err != nil {
 		panic(err)

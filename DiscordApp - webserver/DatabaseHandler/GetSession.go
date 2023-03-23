@@ -42,7 +42,7 @@ func NewToken(db *sql.DB, data utils.NewTokenJSON) {
 	fmt.Println(res)
 }
 
-func GetGuildId(db *sql.DB, data utils.GetTokenJSON) string {
+func GetGuildId(db *sql.DB, data utils.GetGuildJSON) string {
 	queryRes, err := db.Query("SELECT guildid, tokenpasswrd FROM SessionTable WHERE token = $1", data.Token)
 	if err != nil {
 		panic(err)
@@ -52,7 +52,7 @@ func GetGuildId(db *sql.DB, data utils.GetTokenJSON) string {
 	var guildid string
 
 	for queryRes.Next() {
-		err := queryRes.Scan(guildid, &pass)
+		err := queryRes.Scan(&guildid, &pass)
 		if err != nil {
 			panic(err)
 		}
@@ -61,4 +61,31 @@ func GetGuildId(db *sql.DB, data utils.GetTokenJSON) string {
 		return ""
 	}
 	return guildid
+}
+
+func GetTokenByGuild(db *sql.DB, guild string) string {
+	queryRes, err := db.Query("SELECT token FROM SessionTable WHERE guildid = $1", guild)
+	if err != nil {
+		panic(err)
+	}
+
+	var token string
+
+	for queryRes.Next() {
+		err := queryRes.Scan(&token)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return token
+}
+
+func RemoveToken(db *sql.DB, token string) bool {
+	res, err := db.Exec("SELECT id FROM SessionTable WHERE token = $1", token)
+	if err != nil {
+		return false
+	}
+	fmt.Println(res)
+	return true
 }

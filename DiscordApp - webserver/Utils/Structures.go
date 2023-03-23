@@ -11,7 +11,12 @@ type NewTokenJSON struct {
 	GuildId  string
 }
 
-type GetTokenJSON struct {
-	Token string
+type GetGuildJSON struct {
+	Token    string
 	Password string
+}
+
+type RemoveTokenJSON struct {
+	Token string
+	GuildId string
 }
