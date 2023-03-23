@@ -41,3 +41,24 @@ func NewToken(db *sql.DB, data utils.NewTokenJSON) {
 	}
 	fmt.Println(res)
 }
+
+func GetGuildId(db *sql.DB, data utils.GetTokenJSON) string {
+	queryRes, err := db.Query("SELECT guildid, tokenpasswrd FROM SessionTable WHERE token = $1", data.Token)
+	if err != nil {
+		panic(err)
+	}
+
+	var pass string
+	var guildid string
+
+	for queryRes.Next() {
+		err := queryRes.Scan(guildid, &pass)
+		if err != nil {
+			panic(err)
+		}
+	}
+	if pass != data.Password {
+		return ""
+	}
+	return guildid
+}
