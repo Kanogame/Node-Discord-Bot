@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
+const { SlashCommandBuilder } = require("@discordjs/builders");
 const { useQueue, useMasterPlayer } = require('discord-player');
 
 module.exports = {

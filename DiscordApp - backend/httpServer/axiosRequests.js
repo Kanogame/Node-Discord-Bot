@@ -1,7 +1,7 @@
 const axios = require('axios');
 const { url } = require("../config.json");
 
-module.exports = {newToken}
+module.exports = {newToken, getToken, deleteToken}
 
 async function newToken(token, password, guildId) {
     sendType("newToken");
@@ -10,20 +10,36 @@ async function newToken(token, password, guildId) {
         Password: password, 
         GuildId: guildId };
     console.log(data);
-    await axios.post(url, data,  
+    const resp = await axios.post(url, data,  
     {
         headers: {
             'Content-Type': 'application/json'
         }
     })
-    .then((responce) => {
-        console.log(responce.data);
-    });    
+    console.log(resp.text());
+}
+
+async function getToken(guildId) {
+    sendType("getToken");
+    const resp = await axios.post(url, guildId);
+    return resp.text();
+}
+
+async function deleteToken(token, guildId) {
+    sendType("removeToken");
+    const data = {
+        Token: token,
+        GuildId: guildId
+    }
+    const resp = await axios.post(url, data, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    console.log(resp.text());
 }
 
 async function sendType(Type) {
-    await axios.post(url, Type)
-    .then((responce) => {if (responce !== "success") {
-        console.log("error while sending type")
-    }})
+    const resp = await axios.post(url, Type)
+    console.log(resp.text());
 }
