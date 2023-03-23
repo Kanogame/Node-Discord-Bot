@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 const { Player, useQueue } = require('discord-player');
 
 const handleServer = require("../httpServer/handleServer");
+const { newToken } = require("../httpServer/axiosRequests");
 const { randomString } = require("../utils/randomSrting");
 
 module.exports= {
