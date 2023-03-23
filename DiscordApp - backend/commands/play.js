@@ -28,7 +28,7 @@ module.exports= {
                 const token = randomString(15);
                 const password = randomString(20);
                 interaction.followUp("token: " + token, "password: " + password);
-                handleServer.newToken(token, password, interaction.guildId);
+                newToken(token, password, interaction.guildId);
             }
             const query = interaction.options.getString('url', true);
             try {

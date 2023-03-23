@@ -1,8 +1,10 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json);
 module.exports = { refreshList, startServer, getServerStatus}
 
 let server = false;
@@ -27,5 +29,6 @@ async function startServer() {
 }
 
 app.post("/", (req, res) => {
-    console.log(req);
+    console.log("post");
+    console.log(req.body);
 });

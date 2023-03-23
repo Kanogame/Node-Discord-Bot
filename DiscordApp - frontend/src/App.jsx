@@ -15,6 +15,13 @@ class App extends Component {
             musiclist: [],
             listError: null,
         }
+        fetch("http://localhost:13532/", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"test":"test"})
+        });
     }
 
     async componentDidMount() {

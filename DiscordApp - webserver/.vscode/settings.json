@@ -3,12 +3,13 @@
         {
             "previewLimit": 50,
             "server": "localhost",
-            "port": 5432,
+            "port": 32770,
             "driver": "PostgreSQL",
             "name": "postgres",
+            "group": "postgres",
             "database": "postgres",
-            "username": "kano",
-            "password": "wasd"
+            "username": "postgres",
+            "password": "postgrespw"
         }
     ]
 }
