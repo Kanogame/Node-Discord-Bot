@@ -16,22 +16,22 @@ async function newToken(token, password, guildId) {
             'Content-Type': 'application/json'
         }
     })
-    console.log(resp.text());
+    console.log(resp);
 }
 
 async function getToken(guildId) {
     sendType("getToken");
     const resp = await axios.post(url, guildId);
-    return resp.text();
+    return resp.data;
 }
 
 async function deleteToken(token) {
     sendType("removeToken");
     const resp = await axios.post(url, token)
-    console.log(resp.text());
+    console.log(resp.data);
 }
 
 async function sendType(Type) {
     const resp = await axios.post(url, Type)
-    console.log(resp.text());
+    console.log(resp.data);
 }
