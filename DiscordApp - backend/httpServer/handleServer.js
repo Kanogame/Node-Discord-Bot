@@ -6,12 +6,13 @@ const { useQueue } = require('discord-player');
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json);
-module.exports = { refreshList, startServer, getServerStatus}
+app.use(bodyParser.json());
+module.exports = {startServer, getServerStatus}
 
 let server = false;
 
 app.get("/links/get", (req, res) => {
+    console.log("got get");
     const guild = axios.getGuild(req.query.token,  req.query.pass);
     const queue = useQueue(guild);
     const tracks = queue.tracks.map((track, idx) => {return `**${++idx})** [${track.title}](${track.url})`});

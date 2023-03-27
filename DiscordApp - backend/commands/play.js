@@ -27,7 +27,7 @@ module.exports= {
             if (queue.currentTrack === null) {
                 const token = randomString(15);
                 const password = randomString(20);
-                interaction.followUp("token: " + token, "password: " + password);
+                interaction.followUp("token: " + token + " |" +  "password: " + password);
                 newToken(token, password, interaction.guildId);
             }
             const query = interaction.options.getString('url', true);
@@ -44,10 +44,6 @@ module.exports= {
             if (!handleServer.getServerStatus())
             {
                 handleServer.startServer();
-            }
-            if (queue)
-            {
-                handleServer.refreshList(useQueue(interaction.guildId).tracks);
             }
             await interaction.followUp("DONE!");
 		}

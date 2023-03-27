@@ -15,28 +15,26 @@ class App extends Component {
             musiclist: [],
             listError: null,
         }
-        fetch("http://localhost:13532/", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"test":"test"})
-        });
+        this.componentDidMount();
     }
 
-    async componentDidMount() {
-        try {
-            const resp = await fetch("http://localhost:13532/links/get");
+    GetLinks = async () => {
+        const resp = await fetch("http://localhost:13532/links/get?token=ttLfqWYYeI4ZyyW&pass=FCtEvw2qWefVOAKkaEaL");
             const links = await resp.json();
             this.setState({
                 musiclist: links,
             });
         console.log(links);
-        } catch (er) {
-           this.setState({
-            listError: er, 
-           });
-        }
+    }
+
+    componentDidMount = async () => {
+        console.log("fetch");
+        const resp = await fetch("http://localhost:13532/links/get?token=iQzmfCWC4GxMGXR&pass=eYTTiLmkoo5leUmLDNIf");
+        const links = await resp.json();
+        this.setState({
+            musiclist: links,
+        });
+        console.log(links);
     }
 
     async handleclick() {
@@ -53,7 +51,7 @@ class App extends Component {
 
     render() {
         const result = [];
-        for (let music of this.state.musiclist) {
+        /*for (let music of this.state.musiclist) {
             const musicCard = (
                 <>
                 <Card>
@@ -66,9 +64,9 @@ class App extends Component {
                 </>
             );
             result.push(musicCard);
-        }
+        }*/
         return <Root>
-            {result}
+            {this.musiclist}
             </Root>;
     }
 }

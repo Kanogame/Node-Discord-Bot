@@ -21,11 +21,15 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/token/get" {
+	fmt.Println(r.URL.Path)
+	if r.URL.Path == "/token/new" {
+		fmt.Println("postNewPlayer")
 		postNewPlayer(w, r)
 	} else if r.URL.Path == "/token/remove" {
+		fmt.Println("postRemovePlayer")
 		postRemovePlayer(w, r)
 	} else if r.URL.Path == "/guild/get" {
+		fmt.Println("postGetGuild")
 		postGetGuild(w, r)
 	}
 }
