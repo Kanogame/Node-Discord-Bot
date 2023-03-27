@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const axios = require("./axiosRequests");
+const { useQueue } = require('discord-player');
 
 const app = express();
 app.use(cors());
@@ -9,13 +11,12 @@ module.exports = { refreshList, startServer, getServerStatus}
 
 let server = false;
 
-async function refreshList(list) {
-    list = list;
-
-    await app.get("/links/get", (req, res) => {
-        res.json(list);
-    });
-}
+app.get("/links/get", (req, res) => {
+    const guild = axios.getGuild(req.query.token,  req.query.pass);
+    const queue = useQueue(guild);
+    const tracks = queue.tracks.map((track, idx) => {return `**${++idx})** [${track.title}](${track.url})`});
+    res.json(JSON.stringify(tracks));
+});
 
 function getServerStatus() {
     return server;

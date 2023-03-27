@@ -26,7 +26,8 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 			var user utils.User
 			user.Token = token
 			user.Passhash = pass
-			databaseHandler.GetQueueByToken(databaseHandler.CreateNewConnection(), user)
+			db := databaseHandler.CreateNewConnection()
+			databaseHandler.GetQueueByToken(db, user)
 			fmt.Println(token)
 		}
 	} else if r.Method == "POST" {
@@ -35,10 +36,6 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
-	if postType == "" {
-		postGetType(r)
-		fmt.Fprintf(w, "success")
-	} else {
-		postNewPlayer(w, r)
+	if r.URL.Path == "/getGuild" {
 	}
 }

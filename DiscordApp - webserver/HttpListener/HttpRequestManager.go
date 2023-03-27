@@ -6,8 +6,6 @@ import (
 	"strconv"
 )
 
-var postType = ""
-
 func StartHttpServer(port int) {
 	handler := http.HandlerFunc(HttpHandler)
 	fmt.Println("RequestManager is lintening on", port)
@@ -23,12 +21,11 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
-	if postType == "" {
-		postGetType(r)
-		fmt.Fprintf(w, "success")
-	} else if postType == "newToken" {
+	if r.URL.Path == "/token/get" {
 		postNewPlayer(w, r)
-	} else if postType == "deleteToken" {
+	} else if r.URL.Path == "/token/remove" {
 		postRemovePlayer(w, r)
+	} else if r.URL.Path == "/guild/get" {
+		postGetGuild(w, r)
 	}
 }
