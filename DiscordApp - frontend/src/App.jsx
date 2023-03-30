@@ -34,7 +34,7 @@ class App extends Component {
 
     componentDidMount = async () => {
         console.log("fetch");
-        const resp = await fetch("http://localhost:13532/links/get?token=iQzmfCWC4GxMGXR&pass=eYTTiLmkoo5leUmLDNIf");
+        const resp = await fetch("http://localhost:13532/links/get?token=" + this.state.token + "&pass=" + this.state.pass);
         const links = await resp.json();
         this.setState({
             musiclist: links,

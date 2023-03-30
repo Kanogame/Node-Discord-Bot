@@ -70,5 +70,5 @@ func postGetGuild(w http.ResponseWriter, r *http.Request) {
 	}
 	db := databaseHandler.CreateNewConnection()
 	res := databaseHandler.GetGuildId(db, post)
-	fmt.Fprintf(w, res)
+	fmt.Fprintf(w, "!"+res)
 }

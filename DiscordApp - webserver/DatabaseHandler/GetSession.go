@@ -83,6 +83,7 @@ func GetTokenByGuild(db *sql.DB, guild string) string {
 }
 
 func RemoveToken(db *sql.DB, token string) bool {
+	fmt.Println(token)
 	res, err := db.Query("SELECT id FROM SessionTable WHERE token = $1", token)
 	if err != nil {
 		panic(err)
