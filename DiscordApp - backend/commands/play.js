@@ -25,10 +25,10 @@ module.exports= {
         if (interaction.options.getSubcommand() === "song") {
             const queue = player.nodes.create(interaction.guildId);
             if (queue.currentTrack === null) {
-                console.log(interaction.guildId);
                 const token = randomString(15);
                 const password = randomString(20);
                 interaction.followUp("http://localhost:3000?token=" + token + "&pass=" + password);
+                console.log(interaction.guildId);
                 newToken(token, password, interaction.guildId);
             }
             const query = interaction.options.getString('url', true);

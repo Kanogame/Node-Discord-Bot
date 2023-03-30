@@ -24,7 +24,6 @@ async function getGuild(token, password) {
         Token: token, 
         Password: password
     };
-    console.log(data);
     const resp = await axios.post(url + "guild/get", data,  
     {
         headers: {
@@ -32,6 +31,7 @@ async function getGuild(token, password) {
         }
     })
     console.log(resp.data);
+    return resp.data;
 }
 
 async function getToken(guildId) {

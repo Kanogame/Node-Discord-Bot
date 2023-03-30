@@ -11,9 +11,10 @@ module.exports = {startServer, getServerStatus}
 
 let server = false;
 
-app.get("/links/get", (req, res) => {
+app.get("/links/get", async (req, res) => {
     console.log("got get");
-    const guild = axios.getGuild(req.query.token,  req.query.pass);
+    const guild = await axios.getGuild(req.query.token,  req.query.pass);
+    console.log(guild);
     const queue = useQueue(+guild);
     console.log(queue);
     const tracks = queue.tracks.map((track, idx) => {return `**${++idx})** [${track.title}](${track.url})`});

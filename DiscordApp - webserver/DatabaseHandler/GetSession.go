@@ -37,8 +37,7 @@ func GetQueueByToken(db *sql.DB, user utils.User) int {
 func NewToken(db *sql.DB, data utils.NewTokenJSON) {
 	res, err := db.Exec("INSERT INTO SessionTable (token, tokenPasswrd, guildid) VALUES($1, $2, $3)", data.Token, data.Password, data.GuildId)
 	if err != nil {
-		RemoveToken(db, data.Token)
-		NewToken(db, data)
+		fmt.Println("FUCK")
 	}
 	fmt.Println(res)
 }
@@ -58,9 +57,10 @@ func GetGuildId(db *sql.DB, data utils.GetGuildJSON) string {
 			panic(err)
 		}
 	}
-	if pass != data.Password {
-		return ""
-	}
+	//if pass != data.Password {
+	//	return ""
+	//}
+	fmt.Println(guildid)
 	return guildid
 }
 
@@ -85,16 +85,23 @@ func GetTokenByGuild(db *sql.DB, guild string) string {
 func RemoveToken(db *sql.DB, token string) bool {
 	res, err := db.Query("SELECT id FROM SessionTable WHERE token = $1", token)
 	if err != nil {
-		return false
+		panic(err)
 	}
 
-	var id int
+	var id string
 
 	for res.Next() {
 		err := res.Scan(&id)
 		utils.ClientErrorHandler(err)
 	}
 
-	db.Exec("REMOVE FROM SessionTable WHERE id = $1", id)
+	fmt.Println(id)
+
+	ress, err := db.Exec("DELETE FROM SessionTable WHERE id = $1", id)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(ress)
 	return true
 }
