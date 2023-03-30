@@ -19,7 +19,7 @@ class App extends Component {
     }
 
     GetLinks = async () => {
-        const resp = await fetch("http://localhost:13532/links/get?token=ttLfqWYYeI4ZyyW&pass=FCtEvw2qWefVOAKkaEaL");
+        const resp = await fetch("http://localhost:13532/links/get?token=ETMWd28ihlsuQWN&pass=fQIweJWAzAUWpZhh7S85");
             const links = await resp.json();
             this.setState({
                 musiclist: links,
