@@ -11,15 +11,20 @@ margin: 10px`
 class App extends Component {
     constructor(props) {
         super(props);
+        const queryParams = new URLSearchParams(window.location.search)
+        const token = queryParams.get("token")
+        const pass = queryParams.get("location")
         this.state ={
             musiclist: [],
             listError: null,
+            token: token,
+            pass: pass
         }
         this.componentDidMount();
     }
 
     GetLinks = async () => {
-        const resp = await fetch("http://localhost:13532/links/get?token=ETMWd28ihlsuQWN&pass=fQIweJWAzAUWpZhh7S85");
+        const resp = await fetch("http://localhost:13532/links/get?token=" + this.state.token + "&pass=" + this.state.pass);
             const links = await resp.json();
             this.setState({
                 musiclist: links,

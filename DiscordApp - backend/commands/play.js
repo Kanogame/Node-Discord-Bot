@@ -28,7 +28,7 @@ module.exports= {
                 console.log(interaction.guildId);
                 const token = randomString(15);
                 const password = randomString(20);
-                interaction.followUp("http://localhost:13532/links/get?token=" + token + "&pass=" + password);
+                interaction.followUp("http://localhost:3000?token=" + token + "&pass=" + password);
                 newToken(token, password, interaction.guildId);
             }
             const query = interaction.options.getString('url', true);
