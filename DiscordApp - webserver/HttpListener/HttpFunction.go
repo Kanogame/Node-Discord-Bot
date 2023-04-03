@@ -70,5 +70,9 @@ func postGetGuild(w http.ResponseWriter, r *http.Request) {
 	}
 	db := databaseHandler.CreateNewConnection()
 	res := databaseHandler.GetGuildId(db, post)
-	fmt.Fprintf(w, "!"+res)
+	var data = map[string]string{
+		"guild": res,
+	}
+	jsonres, err := json.Marshal(data)
+	w.Write([]byte(jsonres))
 }

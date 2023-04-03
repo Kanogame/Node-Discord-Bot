@@ -31,6 +31,7 @@ async function getGuild(token, password) {
         }
     })
     console.log(resp);
+    console.log(resp.headers);
     return resp.data;
 }
 
