@@ -30,7 +30,6 @@ async function getGuild(token, password) {
             'Content-Type': 'application/json'
         }
     })
-    console.log(resp.data);
     const formatedResp = resp.data.guild.slice(0, resp.data.guild.length - 1)
     return formatedResp;
 }

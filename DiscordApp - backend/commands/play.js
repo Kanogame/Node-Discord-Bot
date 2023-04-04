@@ -41,11 +41,6 @@ module.exports= {
             } catch (e) {
                 return interaction.reply(`Something went wrong: ${e}`);
             }
-
-            if (!handleServer.getServerStatus())
-            {
-                handleServer.startServer();
-            }
             await interaction.followUp("DONE!");
 		}
     }

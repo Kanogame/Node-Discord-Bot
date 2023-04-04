@@ -15,10 +15,7 @@ app.get("/links/get", async (req, res) => {
     console.log("got get");
     const guildid = await axios.getGuild(req.query.token,  req.query.pass);
     const queue = useQueue(guildid);
-    if (queue === null) {
-    }
     const tracks = queue.tracks.map((track, idx) => {return `**${++idx})** [${track.title}](${track.url})`});
-    console.log(JSON.stringify(tracks));
     res.json(JSON.stringify(tracks));
 });
 

@@ -3,6 +3,7 @@ const path = require('node:path');
 const { Client, Collection,  GatewayIntentBits } = require('discord.js');
 const { Player } = require('discord-player');
 const { token } = require('./config.json');
+const handleServer = require("./httpServer/handleServer")
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
@@ -24,10 +25,6 @@ for (const file of commandFiles) {
 
 const player = new Player(client);
 
-player.events.on('playerStart', (queue, track) => {
-    //queue.metadata.channel.send(`Started playing **${track.title}**!`);
-});
-
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
@@ -43,3 +40,4 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
+handleServer.startServer();
