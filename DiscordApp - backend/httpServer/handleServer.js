@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const axios = require("./axiosRequests");
-const { useQueue, usePlayer } = require('discord-player');
+const { useQueue } = require('discord-player');
 
 const app = express();
 app.use(cors());
@@ -13,10 +13,10 @@ let server = false;
 
 app.get("/links/get", async (req, res) => {
     console.log("got get");
-    const guild = await axios.getGuild(req.query.token,  req.query.pass);
-    console.log(guild.guild);
-    const queue = useQueue(guild);
-    console.log(queue);
+    const guildid = await axios.getGuild(req.query.token,  req.query.pass);
+    const queue = useQueue(guildid);
+    if (queue === null) {
+    }
     const tracks = queue.tracks.map((track, idx) => {return `**${++idx})** [${track.title}](${track.url})`});
     res.json(JSON.stringify(tracks));
 });
