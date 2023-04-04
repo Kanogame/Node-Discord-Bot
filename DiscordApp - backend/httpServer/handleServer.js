@@ -18,6 +18,7 @@ app.get("/links/get", async (req, res) => {
     if (queue === null) {
     }
     const tracks = queue.tracks.map((track, idx) => {return `**${++idx})** [${track.title}](${track.url})`});
+    console.log(JSON.stringify(tracks));
     res.json(JSON.stringify(tracks));
 });
 

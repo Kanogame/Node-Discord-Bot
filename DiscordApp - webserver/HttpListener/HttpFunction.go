@@ -20,7 +20,15 @@ func postNewPlayer(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	db := databaseHandler.CreateNewConnection()
-	databaseHandler.NewToken(db, post)
+	err = databaseHandler.NewToken(db, post)
+	if err != nil {
+		utils.ClientErrorHandler(err)
+		databaseHandler.RemoveToken(db, post.GuildId)
+		err := databaseHandler.NewToken(db, post)
+		if err != nil {
+			return
+		}
+	}
 	fmt.Fprintf(w, "success")
 }
 

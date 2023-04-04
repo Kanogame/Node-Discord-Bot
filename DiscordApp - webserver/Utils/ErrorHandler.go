@@ -1,5 +1,7 @@
 package Utils
 
+import "fmt"
+
 func ServerErrorHandler(err error) {
 	if err != nil {
 		panic(err)
@@ -8,6 +10,6 @@ func ServerErrorHandler(err error) {
 
 func ClientErrorHandler(err error) {
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 }
