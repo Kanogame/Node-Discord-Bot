@@ -25,6 +25,9 @@ for (const file of commandFiles) {
 
 const player = new Player(client);
 
+player.events.on('playerStart', (queue, track) => {
+    //queue.metadata.channel.send(`Started playing **${track.title}**!`);
+});
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));

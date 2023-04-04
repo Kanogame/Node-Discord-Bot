@@ -20,7 +20,6 @@ class App extends Component {
             token: token,
             pass: pass
         }
-        this.componentDidMount();
     }
 
     GetLinks = async () => {
@@ -56,22 +55,23 @@ class App extends Component {
 
     render() {
         const result = [];
-        /*for (let music of this.state.musiclist) {
+        for (let track of this.state.musiclist) {
             const musicCard = (
                 <>
                 <Card>
-                    <div>{music.id}</div>
-                    <div>{music.title}</div>
-                    <div>{music.author}</div>
-                    <div>{music.url}</div>
+                    <div>{track.id}</div>
+                    <div>{track.title}</div>
+                    <div>{track.length}</div>
+                    <div>{track.url}</div>
+                    <div>{track.request}</div>
                 </Card>
                 <button onClick={this.handleclick()}>Add</button>
                 </>
             );
             result.push(musicCard);
-        }*/
+        }
         return <Root>
-            {this.musiclist}
+            {result}
             </Root>;
     }
 }

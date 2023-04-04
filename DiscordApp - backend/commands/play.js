@@ -39,7 +39,7 @@ module.exports= {
                     }
                 });
             } catch (e) {
-                return interaction.reply(`Something went wrong: ${e}`);
+                return interaction.followUp(`Something went wrong: ${e}`);
             }
             await interaction.followUp("DONE!");
 		}

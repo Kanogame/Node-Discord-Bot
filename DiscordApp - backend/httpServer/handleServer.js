@@ -1,12 +1,12 @@
 const express = require("express");
 const cors = require("cors");
-const bodyParser = require("body-parser");
+//const bodyParser = require("body-parser");
 const axios = require("./axiosRequests");
 const { useQueue } = require('discord-player');
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 module.exports = {startServer, getServerStatus}
 
 let server = false;
@@ -15,8 +15,18 @@ app.get("/links/get", async (req, res) => {
     console.log("got get");
     const guildid = await axios.getGuild(req.query.token,  req.query.pass);
     const queue = useQueue(guildid);
-    const tracks = queue.tracks.map((track, idx) => {return `**${++idx})** [${track.title}](${track.url})`});
-    res.json(JSON.stringify(tracks));
+    if (queue === null) {
+        res.json(null);
+    } else {
+    const tracks = queue.tracks.map((track, idx) => {return {
+        id: idx++,
+        title: track.title,
+        length: track.duration,
+        url: track.url,
+        request: track.requestedBy,
+    }});
+    res.json(tracks);
+}
 });
 
 function getServerStatus() {
@@ -29,8 +39,9 @@ async function startServer() {
         server = true;
     });
 }
-
+/*
 app.post("/", (req, res) => {
     console.log("post");
     console.log(req.body);
 });
+*/
