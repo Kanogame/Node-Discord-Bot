@@ -14,11 +14,12 @@ class App extends Component {
         super(props);
         const queryParams = new URLSearchParams(window.location.search)
         const token = queryParams.get("token")
-        const pass = queryParams.get("location")
+        const pass = queryParams.get("pass")
+        console.log(token + " ! " + pass)
         this.state ={
             tracks: [],
             token: token,
-            pass: pass
+            pass: pass,
         }
     }
 
@@ -29,12 +30,12 @@ class App extends Component {
         this.setState({
             tracks: links,
         });
-        console.log(links);
+        console.log(this.state.token);
     }
 
     render() {
         return <Root>
-            <Player></Player>
+            <Player token={this.state.token} pass={this.state.pass}></Player>
             <MusicCard tracks={this.state.tracks}></MusicCard>
             </Root>;
     }

@@ -5,7 +5,7 @@ const Root = styled.div`
 flex: 3 1 0;
 background: lime;`
 
-const buttonSection = styled.div`
+const ButtonSection = styled.div`
 display: flex;
 justify-content: center;`
 
@@ -17,16 +17,28 @@ class Player extends Component {
         }
     }
 
-    pause = () => {
+    pause = async () => {
         console.log("paused!");
+        const data = {
+            Token : this.props.token,
+            Password : this.props.pass,
+        }
+        console.log(data);
+        const resp = await fetch("http://localhost:4320/player/pause", {
+            method: "POST",
+            body: data, 
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
     }
 
     render() {
         return <>
         <Root>player</Root>
-        <buttonSection>
+        <ButtonSection>
             <button onClick={this.pause}>pause</button>
-        </buttonSection>
+        </ButtonSection>
         </>
     }
 }

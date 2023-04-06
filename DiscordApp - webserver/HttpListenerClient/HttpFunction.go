@@ -16,6 +16,7 @@ func postPlayerPause(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	var post utils.PauseJSON
+	fmt.Println(string(body))
 	err = json.Unmarshal(body, &post)
 	if err != nil {
 		panic(err)
