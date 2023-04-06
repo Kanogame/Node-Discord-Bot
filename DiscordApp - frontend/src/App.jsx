@@ -1,12 +1,15 @@
-import React, { Component } from "react"
+import React, { Component } from "react";
 import styled from "styled-components";
+import Player from "./Player.jsx";
 
 const Root = styled.div`
-text-align: center;`
+text-align: center;
+display: flex`
 
 const Card = styled.div`
 border: 1px solid black;
 margin: 10px`
+
 
 class App extends Component {
     constructor(props) {
@@ -15,42 +18,20 @@ class App extends Component {
         const token = queryParams.get("token")
         const pass = queryParams.get("location")
         this.state ={
-            musiclist: [],
-            listError: null,
+            tracks: [],
             token: token,
             pass: pass
         }
     }
 
-    GetLinks = async () => {
-        const resp = await fetch("http://localhost:13532/links/get?token=" + this.state.token + "&pass=" + this.state.pass);
-            const links = await resp.json();
-            this.setState({
-                musiclist: links,
-            });
-        console.log(links);
-    }
-
     componentDidMount = async () => {
         console.log("fetch");
-        const resp = await fetch("http://localhost:13532/links/get?token=" + this.state.token + "&pass=" + this.state.pass);
+        const resp = await fetch("http://localhost:13532/tracks/get?token=" + this.state.token + "&pass=" + this.state.pass);
         const links = await resp.json();
         this.setState({
-            musiclist: links,
+            tracks: links,
         });
         console.log(links);
-    }
-
-    async handleclick() {
-        const resp = await fetch("http://localhost:13532/links/get", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' 
-            },
-            body: "POST testing",
-        });
-        let text = await resp.json();
-        alert(text);
     }
 
     render() {
@@ -65,13 +46,13 @@ class App extends Component {
                     <div>{track.url}</div>
                     <div>{track.request}</div>
                 </Card>
-                <button onClick={this.handleclick()}>Add</button>
                 </>
             );
             result.push(musicCard);
         }
         return <Root>
-            {result}
+            <Player></Player>
+            <musicCard tracks={this.state.tracks}></musicCard>
             </Root>;
     }
 }
