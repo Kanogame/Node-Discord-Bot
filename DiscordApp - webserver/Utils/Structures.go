@@ -2,7 +2,7 @@ package Utils
 
 type User struct {
 	Token    string
-	Passhash string
+	Password string
 }
 
 type NewTokenJSON struct {
@@ -17,6 +17,11 @@ type GetGuildJSON struct {
 }
 
 type RemoveTokenJSON struct {
-	Token string
+	Token   string
 	GuildId string
+}
+
+type PauseJSON struct {
+	Token    string
+	Password string
 }

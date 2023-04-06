@@ -5,6 +5,10 @@ const Root = styled.div`
 flex: 3 1 0;
 background: lime;`
 
+const buttonSection = styled.div`
+display: flex;
+justify-content: center;`
+
 class Player extends Component {
     constructor(props) {
         super(props);
@@ -13,9 +17,16 @@ class Player extends Component {
         }
     }
 
+    pause = () => {
+        console.log("paused!");
+    }
+
     render() {
         return <>
         <Root>player</Root>
+        <buttonSection>
+            <button onClick={this.pause}>pause</button>
+        </buttonSection>
         </>
     }
 }

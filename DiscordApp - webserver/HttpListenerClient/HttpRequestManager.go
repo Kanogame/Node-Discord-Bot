@@ -2,8 +2,6 @@ package httplistenerclient
 
 import (
 	"fmt"
-	databaseHandler "main/DatabaseHandler"
-	utils "main/Utils"
 	"net/http"
 	"strconv"
 )
@@ -18,24 +16,15 @@ func StartHttpServer(port int) {
 
 func HttpHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		path := r.URL.Path
-
-		if path == "/tracks" {
-			token := r.URL.Query().Get("token")
-			pass := r.URL.Query().Get("pass")
-			var user utils.User
-			user.Token = token
-			user.Passhash = pass
-			db := databaseHandler.CreateNewConnection()
-			databaseHandler.GetQueueByToken(db, user)
-			fmt.Println(token)
-		}
 	} else if r.Method == "POST" {
 		PostHandler(w, r)
 	}
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/getGuild" {
+	fmt.Println(r.URL.Path)
+	if r.URL.Path == "/player/pause" {
+		fmt.Println("player pause")
+		postPlayerPause(w, r)
 	}
 }
