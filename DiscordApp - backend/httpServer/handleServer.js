@@ -1,12 +1,12 @@
 const express = require("express");
 const cors = require("cors");
-//const bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 const axios = require("./axiosRequests");
 const { useQueue } = require('discord-player');
 
 const app = express();
 app.use(cors());
-//app.use(bodyParser.json());
+app.use(bodyParser.json());
 module.exports = {startServer, getServerStatus}
 
 let server = false;
@@ -39,9 +39,10 @@ async function startServer() {
         server = true;
     });
 }
-/*
-app.post("/", (req, res) => {
-    console.log("post");
-    console.log(req.body);
+
+app.post("/player/pause", (req, res) => {
+    data = req.body;
+    console.log(data);
+    //const queue = useQueue(data.guildid);
+    
 });
-*/

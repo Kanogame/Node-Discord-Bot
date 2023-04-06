@@ -1,13 +1,13 @@
 package httplistenerclient
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	databaseHandler "main/DatabaseHandler"
 	utils "main/Utils"
 	"net/http"
-	"net/url"
 )
 
 func postPlayerPause(w http.ResponseWriter, r *http.Request) {
@@ -26,11 +26,9 @@ func postPlayerPause(w http.ResponseWriter, r *http.Request) {
 	db := databaseHandler.CreateNewConnection()
 	guildid := databaseHandler.GetGuildId(db, getGuild)
 
-	data := url.Values{
-		"guildid": {guildid},
-	}
+	data := []byte(fmt.Sprintf(`"guildid":"%v"`, guildid))
 
-	resp, err := http.PostForm("http://localhost:13532/player/pause", data)
+	resp, err := http.NewRequest("POST", "http://localhost:13532/player/pause", bytes.NewBuffer(data))
 	var success map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&success)
 	fmt.Println(success)
