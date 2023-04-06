@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import styled from "styled-components";
 
 const Root = styled.div`
-flex: 1 3 0;
+flex: 3 1 0;
 background: lime;`
 
 class Player extends Component {
