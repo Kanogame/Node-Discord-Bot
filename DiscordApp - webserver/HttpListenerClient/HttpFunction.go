@@ -27,9 +27,13 @@ func postPlayerPause(w http.ResponseWriter, r *http.Request) {
 	db := databaseHandler.CreateNewConnection()
 	guildid := databaseHandler.GetGuildId(db, getGuild)
 
-	data := []byte(fmt.Sprintf(`"guildid":"%v"`, guildid))
+	postBody, err := json.Marshal(map[string]string{
+		"guildid": guildid,
+	})
+	utils.ClientErrorHandler(err)
+	responseBody := bytes.NewBuffer(postBody)
 
-	resp, err := http.NewRequest("POST", "http://localhost:13532/player/pause", bytes.NewBuffer(data))
+	resp, err := http.Post("http://localhost:13532/player/pause", "application/json", responseBody)
 	var success map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&success)
 	fmt.Println(success)

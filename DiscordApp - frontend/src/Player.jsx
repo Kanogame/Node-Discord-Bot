@@ -26,11 +26,13 @@ class Player extends Component {
         console.log(data);
         const resp = await fetch("http://localhost:4320/player/pause", {
             method: "POST",
-            body: data, 
+            mode: "cors",
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify(data), 
         });
+        console.log(await resp.json());
     }
 
     render() {
