@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const axios = require("./axiosRequests");
-const { useQueue } = require('discord-player');
+const { useQueue, useTimeline } = require('discord-player');
 
 const app = express();
 app.use(cors());
@@ -41,8 +41,10 @@ async function startServer() {
 }
 
 app.post("/player/pause", (req, res) => {
-    data = req.body;
+    const data = req.body;
     console.log(data);
-    //const queue = useQueue(data.guildid);
-    
+    const guild = data.guildid.slice(0, data.guildid.length - 1)
+    const timeline = useTimeline(guild);
+    timeline.paused ? timeline.resume() : timeline.pause();
+    res.json({ success: true });
 });
