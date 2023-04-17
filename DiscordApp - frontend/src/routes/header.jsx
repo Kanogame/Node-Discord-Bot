@@ -6,12 +6,15 @@ export default function Header() {
 
     const Header = styled.div`
         width: 100%;
+        max-width: 2000px;
         background: rgb(250,255,73);
         background: linear-gradient(90deg, rgba(250,255,73,1) 0%, rgba(255,196,85,1) 100%);
+        font-family: Raleway;
         display: flex;`;
 
     const HeaderContent = styled.div`
         height: 50px;
+        margin: 0 auto;
         display: flex;
         justify-content: space-between;
         align-items: center;`;
@@ -21,7 +24,8 @@ export default function Header() {
         gap: 50px;`;
 
     const Tab = styled.div`
-        font-size: 20px;`;
+        font-size: 16px;
+        font-weight: 600;`;
 
     const Account = styled.div`
         height: 30px;
@@ -32,6 +36,7 @@ export default function Header() {
             <Header>
                 <HeaderContent>
                     <Tabs>
+                        
                         <Tab>Главная</Tab>
                         <Tab>Мои сервера</Tab>
                         <Tab>Плеер</Tab>
