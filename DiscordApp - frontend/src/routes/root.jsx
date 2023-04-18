@@ -24,7 +24,7 @@ export default function Root() {
     const Tabs = styled.div`
         align-items: center;
         display: flex;
-        gap: 50px;`;
+        gap: 40px;`;
 
     const Tab = styled.div`
         font-size: 16px;
