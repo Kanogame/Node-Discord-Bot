@@ -1,10 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './routes/header';
-import "./styles.css"
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import "./styles.css";
 
-const rootEl = document.getElementById("root");
-const root = ReactDOM.createRoot(rootEl);
-root.render(
-  <App />
-)
+import Root from "./routes/root";
+import Player from "./routes/player"
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      path: "contacts/:contactId",
+      element 
+    ],
+  }
+]);
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);
