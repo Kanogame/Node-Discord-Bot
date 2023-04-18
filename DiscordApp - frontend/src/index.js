@@ -7,15 +7,18 @@ import {
 import "./styles.css";
 
 import Root from "./routes/root";
-import Player from "./routes/player"
+import Player, {loader as playerLoader} from "./routes/player";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     children: [
-      path: "contacts/:contactId",
-      element 
+      {
+        path: "player/:tokenPass",
+        element: <Player />,
+        loader: playerLoader,
+      },
     ],
   }
 ]);
