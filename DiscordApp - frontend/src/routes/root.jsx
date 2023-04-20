@@ -13,7 +13,8 @@ export default function Root() {
         background: rgb(250,255,73);
         background: linear-gradient(90deg, rgba(250,255,73,1) 0%, rgba(255,196,85,1) 100%);
         font-family: Raleway;
-        display: flex;`;
+        display: flex;
+        border-bottom: 1px solid lightgray;`;
 
     const HeaderContent = styled.div`
         height: 50px;

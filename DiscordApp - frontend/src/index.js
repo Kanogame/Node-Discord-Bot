@@ -7,7 +7,7 @@ import {
 import "./styles.css";
 
 import Root from "./routes/root";
-import Player, {loader as playerLoader} from "./routes/player";
+import PlayerSection, {loader as playerLoader} from "./routes/player";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "player/:tokenPass",
-        element: <Player />,
+        element: <PlayerSection />,
         loader: playerLoader,
       },
     ],

@@ -8,7 +8,7 @@ export function loader({params}) {
     return {tokenPass}
 }
 
-export default function Player() {
+export default function PlayerSection() {
     const [token, setToken] = useState("");
     const {tokenPass} = useLoaderData();
 
@@ -22,7 +22,8 @@ export default function Player() {
         height: 100%;  
         justify-content: center;
         align-items: center;
-        background: rgba(0, 0, 0, 0.5);`;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;`;
 
     const Modal = styled.div`
         padding: 30px;
@@ -71,8 +72,38 @@ export default function Player() {
             <Modal>
                 <ModalHead>Введите токен:</ModalHead>
                 <ModalInput type="text" placeholder="20-ти значный токен" value={token} onChange={setTokenInp} />
-                <ModalButton href="/player">Готово</ModalButton>
+                <ModalButton href={`/player/${tokenPass}&t=${token}`}>Готово</ModalButton>
             </Modal>
         </ModalContent>
+        <Player>
+
+        </Player>
+    </>
+}
+
+function Player(props) {
+const Root = styled.div`
+        display: flex;
+        height: 100%;`;
+
+    const PlayerControls = styled.div`
+        flex: 2 1 0;
+        background: linear-gradient(0deg, rgba(252,255,147,1) 0%, rgba(250,255,73,1) 25%, rgba(255,196,85,1) 100%);`;
+
+    const MusicList = styled.div`
+        flex: 5 1 0;`;
+
+    const Music = styled.div`
+        border: 1px solid black;`;
+
+    return <>
+        <Root>
+            <PlayerControls>
+
+            </PlayerControls>
+            <MusicList>
+                <Music></Music>
+            </MusicList>
+        </Root>
     </>
 }
