@@ -75,14 +75,24 @@ export default function PlayerSection() {
                 <ModalButton href={`/player/${tokenPass}&t=${token}`}>Готово</ModalButton>
             </Modal>
         </ModalContent>
-        <Player>
+        <Player musiclist={[{id: 1, title: "test music", length: "15:32", url: "https://youtube.com", request: "Kanogames"}]}>
 
         </Player>
     </>
 }
 
 function Player(props) {
-const Root = styled.div`
+    const [musiclist, setMusicList] = useState(props.musiclist);
+
+    musiclist.map(music => {<Music
+        id={music.id}
+        title={music.title}
+        length={music.length}
+        url={music.url}
+        request={music.request}
+         />})
+
+    const Root = styled.div`
         display: flex;
         height: 100%;`;
 
@@ -93,17 +103,17 @@ const Root = styled.div`
     const MusicList = styled.div`
         flex: 5 1 0;`;
 
-    const Music = styled.div`
-        border: 1px solid black;`;
-
     return <>
         <Root>
             <PlayerControls>
 
             </PlayerControls>
             <MusicList>
-                <Music></Music>
             </MusicList>
         </Root>
     </>
+}
+
+function Music(props) {
+    
 }
