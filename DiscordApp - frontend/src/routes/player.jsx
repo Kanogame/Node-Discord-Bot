@@ -3,7 +3,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 const ModalContent = styled.div`
-    display: flex;
+    display: none;
     width: 100%;
     height: 100%;  
     justify-content: center;
@@ -49,8 +49,19 @@ const ModalButton = styled.a`
     cursor: pointer;
     &:hover {
         background: #bbc020;
-    }
-`;
+    }`;
+
+const PlayerControls = styled.div`
+    flex: 2 1 0;
+    background: linear-gradient(0deg, rgba(252,255,147,1) 0%, rgba(250,255,73,1) 25%, rgba(255,196,85,1) 100%);`;
+
+const MusicList = styled.div`
+    padding: 15px;
+    flex: 5 1 0;`;
+
+const Root = styled.div`
+    display: flex;
+    height: 100%;`;
 
 export function loader({params}) {
     console.log(params.tokenPass);
@@ -74,14 +85,14 @@ export default function PlayerSection() {
                 <ModalButton href={`/player/${tokenPass}&t=${token}`}>Готово</ModalButton>
             </Modal>
         </ModalContent>
-        
+        <Player musiclist={[{id: 1, title: "test music", length: "15:32", url: "https://youtube.com", request: "Kanogames"}]}></Player>
     </>
 }
 
 function Player(props) {
     const [musiclist, setMusicList] = useState(props.musiclist);
 
-    musiclist.map(music => {<Music
+    const data = musiclist.map(music => {return <Music
         id={music.id}
         title={music.title}
         length={music.length}
@@ -89,28 +100,51 @@ function Player(props) {
         request={music.request}
          />})
 
-    const Root = styled.div`
-        display: flex;
-        height: 100%;`;
-
-    const PlayerControls = styled.div`
-        flex: 2 1 0;
-        background: linear-gradient(0deg, rgba(252,255,147,1) 0%, rgba(250,255,73,1) 25%, rgba(255,196,85,1) 100%);`;
-
-    const MusicList = styled.div`
-        flex: 5 1 0;`;
-
     return <>
         <Root>
             <PlayerControls>
 
             </PlayerControls>
             <MusicList>
+                {data}
             </MusicList>
         </Root>
     </>
 }
 
 function Music(props) {
+    const MusicEl = styled.div`
+        padding: 10px;
+        color: black;
+        border: 1px solid lightgray;`;
 
+    const MusicHead = styled.div`
+        display: flex;
+        justify-content: space-between;`;
+
+    const MusicTitle = styled.div`
+        font-size: 20px;`;
+
+    const MusicTime = styled.div`
+        font-size: 14px;`;
+
+    const MusicType = styled.div`
+        font-size: 14px;`;    
+
+    const MusicUrl = styled.div`
+        font-size: 14px;
+        display: inline-block;
+        margin-left: 10px;
+        color: lightgray;`;  
+
+    return <MusicEl>
+        <MusicHead>
+            <MusicTitle>{props.title}</MusicTitle>
+            <MusicTime>{props.length}</MusicTime>
+        </MusicHead>
+        <MusicHead>
+            <MusicType>Youtube<MusicUrl>{props.url}</MusicUrl></MusicType>
+            <MusicUrl>{"reqested by:" + props.request}</MusicUrl>
+        </MusicHead>
+    </MusicEl>
 }
