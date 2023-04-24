@@ -79,6 +79,10 @@ export default function PlayerSection() {
         setToken(e.target.value);
     }
 
+    const resp = fetch("http://localhost:13532/tracks/get?token=" + tokenQuery + "&pass=" + tokenPass);
+    const links = resp.json();
+    console.log(links)
+
     return (tokenQuery === null ? (<ModalContent>
         <Modal>
             <ModalHead>Введите токен:</ModalHead>
@@ -86,7 +90,7 @@ export default function PlayerSection() {
             <ModalButton><NavLink to={`/player/${tokenPass}?t=${token}`}>Готово</NavLink></ModalButton>
         </Modal>
     </ModalContent>) : 
-    (<Player musiclist={[{id: 1, title: "test music", length: "15:32", url: "https://youtube.com", request: "Kanogames"}]}></Player>))
+    (<Player musiclist={links}></Player>))
 }
 
 function Player(props) {
