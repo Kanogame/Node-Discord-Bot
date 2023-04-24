@@ -1,9 +1,9 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, NavLink } from "react-router-dom";
 import { useState } from "react";
 import styled from "styled-components";
 
 const ModalContent = styled.div`
-    display: none;
+    display: flex;
     width: 100%;
     height: 100%;  
     justify-content: center;
@@ -70,29 +70,30 @@ export function loader({params}) {
 }
 
 export default function PlayerSection() {
+    const queryParams = new URLSearchParams(window.location.search)
     const [token, setToken] = useState("");
     const {tokenPass} = useLoaderData();
+    const tokenQuery =  queryParams.get("t");
 
     function setTokenInp(e) {
         setToken(e.target.value);
     }
 
-    return <>
-        <ModalContent>
-            <Modal>
-                <ModalHead>Введите токен:</ModalHead>
-                <ModalInput type="text" placeholder="20-ти значный токен" value={token} onChange={setTokenInp} />
-                <ModalButton href={`/player/${tokenPass}&t=${token}`}>Готово</ModalButton>
-            </Modal>
-        </ModalContent>
-        <Player musiclist={[{id: 1, title: "test music", length: "15:32", url: "https://youtube.com", request: "Kanogames"}]}></Player>
-    </>
+    return (tokenQuery === null ? (<ModalContent>
+        <Modal>
+            <ModalHead>Введите токен:</ModalHead>
+            <ModalInput type="text" placeholder="20-ти значный токен" value={token} onChange={setTokenInp} />
+            <ModalButton><NavLink to={`/player/${tokenPass}?t=${token}`}>Готово</NavLink></ModalButton>
+        </Modal>
+    </ModalContent>) : 
+    (<Player musiclist={[{id: 1, title: "test music", length: "15:32", url: "https://youtube.com", request: "Kanogames"}]}></Player>))
 }
 
 function Player(props) {
     const [musiclist, setMusicList] = useState(props.musiclist);
 
     const data = musiclist.map(music => {return <Music
+        key={music.id}
         id={music.id}
         title={music.title}
         length={music.length}

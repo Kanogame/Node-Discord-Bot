@@ -5,7 +5,7 @@ import MusicCard from "./MusicCard";
 
 const Root = styled.div`
 text-align: center;
-display: flex`
+display: flex;`
 
 
 
