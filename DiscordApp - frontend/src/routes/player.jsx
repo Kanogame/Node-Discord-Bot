@@ -72,6 +72,7 @@ export async function loader({params}) {
     let links = null;
     if (tokenQuery !== null) {
         links = await getLinks(tokenQuery, tokenPass);
+        await getCurrentSong(tokenQuery, tokenPass);
     }
     return {tokenPass, tokenQuery, links}
 }
@@ -83,9 +84,6 @@ export default function PlayerSection() {
     function setTokenInp(e) {
         setToken(e.target.value);
     }
-
-
-    console.log(links)
 
     return (tokenQuery === null ? (<ModalContent>
         <Modal>
@@ -99,6 +97,11 @@ export default function PlayerSection() {
 
 async function getLinks(token, tokenPass) {
     const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
+    return await resp.json();
+}
+
+async function getCurrentSong(token, tokenPass) {
+    const resp = await fetch("http://localhost:13532/tracks/current/get?token=" + token + "&pass=" + tokenPass);
     return await resp.json();
 }
 
