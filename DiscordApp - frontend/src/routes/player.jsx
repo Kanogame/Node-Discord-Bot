@@ -63,24 +63,28 @@ const Root = styled.div`
     display: flex;
     height: 100%;`;
 
-export function loader({params}) {
+export async function loader({params}) {
     console.log(params.tokenPass);
     const tokenPass = params.tokenPass;
-    return {tokenPass}
+
+    const queryParams = new URLSearchParams(window.location.search);
+    const tokenQuery =  queryParams.get("t");
+    let links = null;
+    if (tokenQuery !== null) {
+        links = await getLinks(tokenQuery, tokenPass);
+    }
+    return {tokenPass, tokenQuery, links}
 }
 
 export default function PlayerSection() {
-    const queryParams = new URLSearchParams(window.location.search)
     const [token, setToken] = useState("");
-    const {tokenPass} = useLoaderData();
-    const tokenQuery =  queryParams.get("t");
+    const {tokenPass, tokenQuery, links} = useLoaderData();
 
     function setTokenInp(e) {
         setToken(e.target.value);
     }
 
-    const resp = fetch("http://localhost:13532/tracks/get?token=" + tokenQuery + "&pass=" + tokenPass);
-    const links = resp.json();
+
     console.log(links)
 
     return (tokenQuery === null ? (<ModalContent>
@@ -91,6 +95,11 @@ export default function PlayerSection() {
         </Modal>
     </ModalContent>) : 
     (<Player musiclist={links}></Player>))
+}
+
+async function getLinks(token, tokenPass) {
+    const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
+    return await resp.json();
 }
 
 function Player(props) {

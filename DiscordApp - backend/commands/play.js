@@ -28,6 +28,7 @@ module.exports= {
                 const token = randomString(15);
                 const password = randomString(20);
                 interaction.followUp(`http://localhost:3000/player/${password}`);
+                interaction.followUp(token);
                 console.log(interaction.guildId);
                 newToken(token, password, interaction.guildId);
             }
