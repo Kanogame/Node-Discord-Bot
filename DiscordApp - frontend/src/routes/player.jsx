@@ -64,22 +64,19 @@ const Root = styled.div`
     height: 100%;`;
 
 export async function loader({params}) {
-    console.log(params.tokenPass);
     const tokenPass = params.tokenPass;
 
     const queryParams = new URLSearchParams(window.location.search);
     const tokenQuery =  queryParams.get("t");
-    let links = null;
-    if (tokenQuery !== null) {
-        links = await getLinks(tokenQuery, tokenPass);
-        await getCurrentSong(tokenQuery, tokenPass);
-    }
-    return {tokenPass, tokenQuery, links}
+    console.log(tokenPass);
+    const songs = tokenQuery !== null ? await getLinks(tokenQuery, tokenPass) : undefined;
+    const current = tokenQuery !== null ? await getCurrentSong(tokenQuery, tokenPass) : undefined;
+    return {tokenPass, tokenQuery, songs, current}
 }
 
 export default function PlayerSection() {
     const [token, setToken] = useState("");
-    const {tokenPass, tokenQuery, links} = useLoaderData();
+    const {tokenPass, tokenQuery, songs} = useLoaderData();
 
     function setTokenInp(e) {
         setToken(e.target.value);
@@ -92,7 +89,7 @@ export default function PlayerSection() {
             <ModalButton><NavLink to={`/player/${tokenPass}?t=${token}`}>Готово</NavLink></ModalButton>
         </Modal>
     </ModalContent>) : 
-    (<Player musiclist={links}></Player>))
+    (<Player musiclist={songs}></Player>))
 }
 
 async function getLinks(token, tokenPass) {

@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const axios = require("./axiosRequests");
-const { useQueue, useTimeline } = require('discord-player');
+const { useQueue, useTimeline, useHistory } = require('discord-player');
 
 const app = express();
 app.use(cors());
@@ -30,8 +30,15 @@ app.get("/tracks/get", async (req, res) => {
 
 app.get("/tracks/current/get", async (req, res) => {
     const guildid = await axios.getGuild(req.query.token,  req.query.pass);
-    const queue = useQueue(guildid);
-    console.log(queue.currentTrack);
+    const History = useHistory(guildid);
+    const track = History.currentTrack;
+    const ResOBj = {
+        title: track.title,
+        length: track.duration,
+        url: track.url,
+        request: track.requestedBy,
+    };
+    res.json(track);
 });
 
 function getServerStatus() {
