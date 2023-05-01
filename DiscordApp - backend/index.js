@@ -3,7 +3,8 @@ const path = require('node:path');
 const { Client, Collection,  GatewayIntentBits } = require('discord.js');
 const { Player } = require('discord-player');
 const { token } = require('./config.json');
-const handleServer = require("./httpServer/handleServer")
+const handleServer = require("./httpServer/handleServer");
+const {startWSserver} = require("./httpServer/webserver");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
@@ -24,6 +25,7 @@ for (const file of commandFiles) {
 }
 
 const player = new Player(client);
+startWSserver();
 
 player.events.on('playerStart', (queue, track) => {
     //queue.metadata.channel.send(`Started playing **${track.title}**!`);

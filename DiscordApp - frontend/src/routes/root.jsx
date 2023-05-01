@@ -38,6 +38,14 @@ const Main = styled.div`
     height: calc(100vh - 100px);`;
 
 export default function Root() {
+    function startWS() {
+        const webSocket = new WebSocket("ws://192.168.2.149:9000");
+
+        webSocket.onopen = () => {
+            console.log('подключился');
+        };
+    }
+
     return (
         <RootDiv>
             <Header>
@@ -51,7 +59,10 @@ export default function Root() {
                     <Account></Account>
                 </HeaderContent>
             </Header>
-            <Main><Outlet /></Main>
+            <Main>
+                <button onClick={startWS}/>
+                <Outlet />
+            </Main>
         </RootDiv>
     )
 }
