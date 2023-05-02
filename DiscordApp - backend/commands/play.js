@@ -32,7 +32,7 @@ module.exports= {
                 interaction.followUp(token);
                 newToken(token, password, interaction.guildId);
             }
-            music.play(interaction.options.getString('url', true));
+            await music.play(interaction.options.getString('url', true));
             const timeline = useTimeline(interaction.guildId);
             var myInt = setInterval(function () {
                 console.log(timeline.timestamp);
