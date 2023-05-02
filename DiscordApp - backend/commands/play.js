@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { Player, useQueue } = require('discord-player');
+const { Player, useQueue, useTimeline } = require('discord-player');
 
 const handleServer = require("../httpServer/handleServer");
 const { newToken } = require("../httpServer/axiosRequests");
@@ -42,6 +42,10 @@ module.exports= {
             } catch (e) {
                 return interaction.followUp(`Something went wrong: ${e}`);
             }
+            const timeline = useTimeline(interaction.guildId);
+            var myInt = setInterval(function () {
+                console.log(timeline.timestamp);
+            }, 500);
             await interaction.followUp("DONE!");
 		}
     }
