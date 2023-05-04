@@ -1,4 +1,4 @@
-const { usePlayer, useQueue } = require("discord-player");
+const { usePlayer, useQueue, Player } = require("discord-player");
 
 module.exports = class Music {
     constructor (interaction, guildId) {
@@ -15,7 +15,7 @@ module.exports = class Music {
 
     play(url) {
         return new Promise(async (resolve) => {
-            const player = usePlayer(this.guildId);
+            const player = Player.singleton(this.interaction.client);
             player.nodes.create(interaction.guildId);
             try {
                 await player.play(interaction.member.voice.channel, url, {
@@ -88,6 +88,10 @@ module.exports = class Music {
     }
 
     isCurrent() {
-        return this.queue.currentSong === null;
+        try {
+            return this.queue.currentSong === null;
+        } catch (e) {
+            return false;
+        }
     }
 }
