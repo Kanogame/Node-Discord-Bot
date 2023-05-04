@@ -1,4 +1,4 @@
-const { usePlayer } = require("discord-player");
+const { usePlayer, useQueue } = require("discord-player");
 
 module.exports = class Music {
     constructor (interaction, guildId) {
@@ -9,8 +9,8 @@ module.exports = class Music {
         }
     }
 
-    async getMusicQueue(guildId) {
-        return await this.getQueue(guildId);
+    getMusicQueue(guildId) {
+        return useQueue(guildId);
     }
 
     play(url) {
@@ -70,6 +70,21 @@ module.exports = class Music {
             await this.queue.delete();
             return resolve();
         });
+    }
+
+    tracks() { 
+        try {
+            const tracks = this.queue.tracks.map((track, idx) => {return {
+                id: idx++,
+                title: track.title,
+                length: track.duration,
+                url: track.url,
+                request: track.requestedBy,
+            }});
+            return tracks;
+        } catch (e) {
+            return null;
+        }
     }
 
     isCurrent() {
