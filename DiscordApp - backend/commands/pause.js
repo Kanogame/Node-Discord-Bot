@@ -1,19 +1,15 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 
+const MusicApi = require("../utils/Music");
+
 module.exports = {
 	data: new SlashCommandBuilder()
         .setName("pause")
         .setDescription("Pauses the current song"),
-		async execute(interaction) {
-		const queue = interaction.client.player.nodes.get(interaction.guildid);
+	async execute(interaction) {
+		const music = MusicApi(interaction, interaction.guildId);
 
-        if (!queue) {
-			await interaction.reply("There are no songs in the queue");
-			return;
-		}
-
-		const currentSong = queue.currentTrack;
-        queue.currentSong.pause();
-        await interaction.reply(currentSong.title + " has been paused.")
+		await music.pause();
+        await interaction.reply("music has been paused.")
 	},
 }

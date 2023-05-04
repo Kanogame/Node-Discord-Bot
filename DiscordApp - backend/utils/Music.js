@@ -13,7 +13,8 @@ module.exports = class Music {
         return await this.getQueue(guildId);
     }
 
-    async play(url) {
+    play(url) {
+        return new Promise(async (resolve) => {
             const player = usePlayer(this.guildId);
             player.nodes.create(interaction.guildId);
             try {
@@ -22,36 +23,52 @@ module.exports = class Music {
                         metadata: interaction
                     }
                 });
+                resolve();
             } catch (e) {
-                return e;
+                resolve();
             }
+        });
     }
 
-    async pause() {
+    resume() {
+        return new Promise(async (resolve) => {
+            await this.queue.currentSong.resume();
+            return resolve();
+        });
+    }
+
+    pause() {
         return new Promise(async (resolve) => {
             await this.queue.currentSong.pause();
             return resolve();
         });
     }
 
-    async skip() {
+    skip() {
         return new Promise(async (resolve) => {
             await this.queue.node.skip();
             return resolve();
         });
     }
 
-    async resume() {
+    resume() {
         return new Promise(async (resolve) => {
             await this.queue.node.resume();
             return resolve();
         });
     }
 
-    async addTrack() {
+    addTrack() {
         return new Promise(async (resolve) => {
             await this.queue.addTrack(track);
             return resolve();
+        });
+    }
+
+    isCurrent() {
+        return new Promise(async (resolve) => {
+            const current = this.queue.currentSong === null;
+            return resolve(current);
         });
     }
 }

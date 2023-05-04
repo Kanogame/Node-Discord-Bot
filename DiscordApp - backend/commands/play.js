@@ -20,7 +20,9 @@ module.exports= {
     async execute(interaction) {
         const music = MusicApi(interaction, interaction.guildId);
 
-        if (!interaction.member.voice.channel) { return await interaction.reply("get in voice and try again") }
+        if (!interaction.member.voice.channel) { 
+            return await interaction.reply("get in voice and try again") 
+        }
         await interaction.deferReply({
             ephemeral: true,
         });
