@@ -7,7 +7,7 @@ module.exports = {
         .setName("skip")
         .setDescription("Skips the current song"),
     async execute(interaction) {
-        const music = MusicApi(interaction, interaction.guildId);
+        const music = new MusicApi(interaction, interaction.guildId);
 
         if (!music.isCurrent()) {
             await music.skip();

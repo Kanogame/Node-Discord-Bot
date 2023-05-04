@@ -13,7 +13,7 @@ module.exports = {
         const token = getToken(guildId);
         deleteToken(token, guildId);
 
-        const music = MusicApi(interaction, interaction.guildId);
+        const music = new MusicApi(interaction, interaction.guildId);
 
 		if (!music.isCurrent()) {
 			await music.quit();

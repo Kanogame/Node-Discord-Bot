@@ -18,7 +18,7 @@ module.exports= {
                 .addStringOption(option => option.setName("url").setDescription("the song's url").setRequired(true))
         ),
     async execute(interaction) {
-        const music = MusicApi(interaction, interaction.guildId);
+        const music = new MusicApi(interaction, interaction.guildId);
 
         if (!interaction.member.voice.channel) { 
             return await interaction.reply("get in voice and try again") 
