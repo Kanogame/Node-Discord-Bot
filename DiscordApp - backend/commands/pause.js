@@ -9,7 +9,9 @@ module.exports = {
 	async execute(interaction) {
 		const music = MusicApi(interaction, interaction.guildId);
 
-		await music.pause();
-        await interaction.reply("music has been paused.")
+		if (!music.isCurrent()) {
+			await music.pause();
+        	await interaction.reply("music has been paused."); 
+		}
 	},
 }

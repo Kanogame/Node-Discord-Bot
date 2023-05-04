@@ -1,19 +1,17 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
+const { SlashCommandBuilder } = require("@discordjs/builders");
+
+const MusicApi = require("../utils/Music");
 
 module.exports = {
 	data: new SlashCommandBuilder()
         .setName("skip")
         .setDescription("Skips the current song"),
-        async execute(interaction) {
-		const queue = interaction.client.player.getQueue(interaction.guildId);
+    async execute(interaction) {
+        const music = MusicApi(interaction, interaction.guildId);
 
-		if (!queue) {
-            await interaction.reply("There are no songs in the queue");
-            return;
+        if (!music.isCurrent()) {
+            await music.skip();
+            await interaction.reply("music has been resumed.");
         }
-
-        const currentSong = queue.current;
-		queue.skip();
-        await interaction.reply(`${currentSong.title} has been skipped!`);
 	},
 }

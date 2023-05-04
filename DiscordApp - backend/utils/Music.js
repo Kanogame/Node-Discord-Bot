@@ -65,10 +65,14 @@ module.exports = class Music {
         });
     }
 
-    isCurrent() {
+    quit() {
         return new Promise(async (resolve) => {
-            const current = this.queue.currentSong === null;
-            return resolve(current);
+            await this.queue.delete();
+            return resolve();
         });
+    }
+
+    isCurrent() {
+        return this.queue.currentSong === null;
     }
 }

@@ -1,6 +1,7 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { useQueue } = require('discord-player');
 const { getToken, deleteToken } = require('../httpServer/axiosRequests');
+
+const MusicApi = require("../utils/Music");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,8 +12,12 @@ module.exports = {
         const guildId = interaction.guildId;
         const token = getToken(guildId);
         deleteToken(token, guildId);
-        const queue = useQueue(guildId);
-        queue.delete();
-        interaction.reply("DONE!");
+
+        const music = MusicApi(interaction, interaction.guildId);
+
+		if (!music.isCurrent()) {
+			await music.quit();
+        	await interaction.reply("quit.");
+		}
     }
 }

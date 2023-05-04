@@ -9,7 +9,9 @@ module.exports = {
 	async execute(interaction) {
 		const music = MusicApi(interaction, interaction.guildId);
 
-		await music.resume();
-        await interaction.reply("music has been resumed.")
+		if (!music.isCurrent()) {
+			await music.resume();
+        	await interaction.reply("music has been resumed.");
+		}
 	},
 }
