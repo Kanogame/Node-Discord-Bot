@@ -1,30 +1,30 @@
-const { usePlayer, useQueue, Player } = require("discord-player");
+const { useTimeline, useQueue, Player, useHistory } = require("discord-player");
 
 module.exports = class Music {
     constructor (interaction, guildId) {
         this.guildId = guildId;
         this.interaction = interaction;
         async () => {
-            this.queue = getMusicQueue(this.guildId);
+            this 
+            this.queue = await useQueue(this.guildId);
+            this.timeline = await useTimeline(this.guild);
+            this.history = await useHistory(this.guild);
         }
-    }
-
-    getMusicQueue(guildId) {
-        return useQueue(guildId);
     }
 
     play(url) {
         return new Promise(async (resolve) => {
             const player = Player.singleton(this.interaction.client);
-            player.nodes.create(interaction.guildId);
+            player.nodes.create(this.interaction.guildId);
             try {
-                await player.play(interaction.member.voice.channel, url, {
+                await player.play(this.interaction.member.voice.channel, url, {
                     nodeOptions: {
-                        metadata: interaction
+                        metadata: this.interaction
                     }
                 });
                 resolve();
             } catch (e) {
+                console.log(e);
                 resolve();
             }
         });
@@ -32,14 +32,14 @@ module.exports = class Music {
 
     resume() {
         return new Promise(async (resolve) => {
-            await this.queue.currentSong.resume();
+            await this.timeline.resume();
             return resolve();
         });
     }
 
     pause() {
         return new Promise(async (resolve) => {
-            await this.queue.currentSong.pause();
+            await this.timeline.pause();
             return resolve();
         });
     }
@@ -89,7 +89,7 @@ module.exports = class Music {
 
     isCurrent() {
         try {
-            return this.queue.currentSong === null;
+            return this.queue.currentTrack === null;
         } catch (e) {
             return false;
         }

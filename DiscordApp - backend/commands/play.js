@@ -35,10 +35,10 @@ module.exports= {
                 newToken(token, password, interaction.guildId);
             }
             await music.play(interaction.options.getString('url', true));
-            const timeline = useTimeline(interaction.guildId);
+            /*const timeline = useTimeline(interaction.guildId);
             var myInt = setInterval(function () {
                 console.log(timeline.timestamp);
-            }, 500);
+            }, 500);*/
             await interaction.followUp("DONE!");
 		}
     }
