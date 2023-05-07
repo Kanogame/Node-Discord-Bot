@@ -12,7 +12,7 @@ module.exports = {
         const tracks = music.tracks();
         let reply = "";
         for (const track of tracks) {
-            reply += `**${track.idx})** [${track.title}](${track.url})\n`;
+            reply += `**${track.id + 1})** [${track.title}](${track.url})\n`;
         }
         interaction.reply(reply);
     }

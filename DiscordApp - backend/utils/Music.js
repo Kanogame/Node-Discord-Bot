@@ -4,12 +4,9 @@ module.exports = class Music {
     constructor (interaction, guildId) {
         this.guildId = guildId;
         this.interaction = interaction;
-        async () => {
-            this 
-            this.queue = await useQueue(this.guildId);
-            this.timeline = await useTimeline(this.guild);
-            this.history = await useHistory(this.guild);
-        }
+        this.timeline = useTimeline(this.guildId);
+        this.queue = useQueue(this.guildId);
+        this.history = useHistory(this.guildId);
     }
 
     play(url) {
@@ -32,43 +29,36 @@ module.exports = class Music {
 
     resume() {
         return new Promise(async (resolve) => {
-            await this.timeline.resume();
-            return resolve();
+            this.timeline.resume();
+            resolve();
         });
     }
 
     pause() {
         return new Promise(async (resolve) => {
-            await this.timeline.pause();
-            return resolve();
+            this.timeline.pause();
+            resolve();
         });
     }
 
     skip() {
         return new Promise(async (resolve) => {
             await this.queue.node.skip();
-            return resolve();
+            resolve();
         });
     }
 
-    resume() {
-        return new Promise(async (resolve) => {
-            await this.queue.node.resume();
-            return resolve();
-        });
-    }
-
-    addTrack() {
+    addTrack(track) { //TODO
         return new Promise(async (resolve) => {
             await this.queue.addTrack(track);
-            return resolve();
+            resolve();
         });
     }
 
     quit() {
         return new Promise(async (resolve) => {
             await this.queue.delete();
-            return resolve();
+            resolve();
         });
     }
 
@@ -81,8 +71,11 @@ module.exports = class Music {
                 url: track.url,
                 request: track.requestedBy,
             }});
+            console.log(this.history.currentTrack);
+            console.log(tracks);
             return tracks;
         } catch (e) {
+            console.log(e);
             return null;
         }
     }
