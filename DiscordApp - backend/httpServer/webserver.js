@@ -18,16 +18,29 @@ class WebSocketServer {
         wsClient.on("message", (messageStr, wsClient) => {
             const message = JSON.parse(messageStr);
             if (message.type === "init") {
-                this.newMusicConnection(message.payload, wsClient);
+                if (this.verifyUser(message.payload)) {
+                    wsClient.send(JSON.stringify({type: "success"}));
+                    this.newMusicConnection(message.payload, wsClient);
+                } else {
+                    wsClient.send(JSON.stringify({type: "error", payload: {error: "no server with this token or token expired"}}));
+                }
             }
         });
+    }
+
+    verifyUser(data) {
+        try  {getGuild(data.token, data.password);}
+        catch (e) {
+            return false
+        }
+        return true
     }
 
     newMusicConnection(data, wsClient) {
         const guildid = getGuild(data.token, data.password);
         const timeline = useTimeline(guildid);
         let inteval = setInterval(() => {
-            wsClient.send(timeline.timestamp.progress);
+            wsClient.send(JSON.stringify({type: "time", payload: {progress: timeline.timestamp.progress}}));
         }, 1000);
     }
 }
