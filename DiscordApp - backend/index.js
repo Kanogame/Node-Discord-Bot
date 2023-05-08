@@ -4,7 +4,7 @@ const { Client, Collection,  GatewayIntentBits } = require('discord.js');
 const { Player } = require('discord-player');
 const { token } = require('./config.json');
 const handleServer = require("./httpServer/handleServer");
-const {startWSserver} = require("./httpServer/webserver");
+const { WebSocketServer } = require("./httpServer/webserver");
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
@@ -16,20 +16,12 @@ const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('
 for (const file of commandFiles) {
 	const filePath = path.join(commandsPath, file);
 	const command = require(filePath);
-	// Set a new item in the Collection with the key as the command name and the value as the exported module
 	if ('data' in command && 'execute' in command) {
 		client.commands.set(command.data.name, command);
 	} else {
 		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 	}
 }
-
-const player = new Player(client);
-startWSserver();
-
-player.events.on('playerStart', (queue, track) => {
-    //queue.metadata.channel.send(`Started playing **${track.title}**!`);
-});
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
@@ -43,6 +35,10 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+
+
+const player = new Player(client);
+const WsServer = new WebSocketServer(9000);
 
 client.login(token);
 handleServer.startServer();

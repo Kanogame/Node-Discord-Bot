@@ -1,21 +1,19 @@
 const WebSocket = require("ws");
 
-module.exports = { startWSserver }
-
 class WebSocketServer {
     constructor(port) {
         this.WsServer = new WebSocket.Server({ port: port });
         this.Nextid = 0;
         this.Clients = new Map();
-        setServer();
+        this.setServer();
     }
 
-    startServer() {
-        this.WsServer.on("connection", onConnect);
+    setServer() {
+        this.WsServer.on("connection", this.onConnect);
     }
 
     onConnect(wsClient) {  
-        wsClient.on("message", onMessage);
+        wsClient.on("message", this.onMessage);
     }
 
     onMessage(messageStr) {
@@ -24,14 +22,4 @@ class WebSocketServer {
     }
 }
 
-function startWSserver() {
-    
-
-    WsServer.on("connection", onConnect);
-    
-    WsServer.on("close", () => { console.log("closed") });
-}
-
-function onConnect() {
-
-}
+module.exports = { WebSocketServer }
