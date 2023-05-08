@@ -17,8 +17,8 @@ class Websocket {
         webSocket.send(JSON.stringify(data));
     }
 
-    messageTypeManager() {
-        
+    messageTypeManager(event) {
+        event.data
     }
 
 

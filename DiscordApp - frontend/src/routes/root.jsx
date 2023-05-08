@@ -39,17 +39,14 @@ const Main = styled.div`
 
 export default function Root() {
     function startWS() {
-        const webSocket = new WebSocket("ws://192.168.2.149:9000");
+        const webSocket 
 
         webSocket.addEventListener("open", () => {
-            const data = { type: "init", payload: {token: "wasd", password: "qert"}};
-            webSocket.send(JSON.stringify(data));
+            
             console.log('подключился');
         });
 
-        webSocket.addEventListener("message", () => {
-            
-        });
+        
     }
 
     return (
