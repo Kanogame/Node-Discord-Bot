@@ -42,6 +42,8 @@ export default function Root() {
         const webSocket = new WebSocket("ws://192.168.2.149:9000");
 
         webSocket.onopen = () => {
+            const data = { type: "init", payload: {token: "wasd", password: "qert"}};
+            webSocket.send(JSON.stringify(data));
             console.log('подключился');
         };
     }

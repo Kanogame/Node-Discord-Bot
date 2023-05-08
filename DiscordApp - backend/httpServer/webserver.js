@@ -13,12 +13,16 @@ class WebSocketServer {
     }
 
     onConnect(wsClient) {  
-        wsClient.on("message", this.onMessage);
+        wsClient.on("message", (messageStr) => {
+            const message = JSON.parse(messageStr);
+            if (message.type === "init") {
+                this.newMusicConnection(message.payload);
+            }
+        });
     }
 
-    onMessage(messageStr) {
-        const message = JSON.parse(messageStr);
-        console.log(message);
+    newMusicConnection(data) {
+        getGuild(data.token, data.password) 
     }
 }
 
