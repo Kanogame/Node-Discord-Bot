@@ -1,4 +1,6 @@
+const { useTimeline } = require("discord-player");
 const WebSocket = require("ws");
+const Music = require("../utils/Music");
 
 class WebSocketServer {
     constructor(port) {
@@ -13,16 +15,20 @@ class WebSocketServer {
     }
 
     onConnect(wsClient) {  
-        wsClient.on("message", (messageStr) => {
+        wsClient.on("message", (messageStr, wsClient) => {
             const message = JSON.parse(messageStr);
             if (message.type === "init") {
-                this.newMusicConnection(message.payload);
+                this.newMusicConnection(message.payload, wsClient);
             }
         });
     }
 
-    newMusicConnection(data) {
-        getGuild(data.token, data.password) 
+    newMusicConnection(data, wsClient) {
+        const guildid = getGuild(data.token, data.password);
+        const timeline = useTimeline(guildid);
+        let inteval = setInterval(() => {
+            wsClient.send(timeline.timestamp.progress);
+        }, 1000);
     }
 }
 
