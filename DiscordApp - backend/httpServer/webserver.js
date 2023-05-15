@@ -25,11 +25,11 @@ class WebSocketServer {
         this.WsServer.on("connection", this.onConnect);
     }
 
-    onConnect(wsClient) {
-        wsClient.on("message", (messageStr, wsClient) => {});
+    onConnect = (wsClient) => {
+        wsClient.on("message", (messageStr, wsClient) => {this.onMessage(messageStr, wsClient)});
     }
 
-    onMessage(messageStr) {
+    onMessage = (messageStr) => {
         const message = JSON.parse(messageStr);
         if (message.type === "init") {
             if (this.verifyUser(message.payload)) {
