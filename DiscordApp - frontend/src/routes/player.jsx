@@ -1,7 +1,8 @@
-import { useLoaderData, NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useLoaderData, NavLink, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Music from "../components/music";
+import Websocket from "../utils/websockets";
 
 const ModalContent = styled.div`
     display: flex;
@@ -64,15 +65,28 @@ const Root = styled.div`
     display: flex;
     height: 100%;`;
 
-export async function loader({params}) {
+export async function loader({request, params}) {
     const tokenPass = params.tokenPass;
 
-    const queryParams = new URLSearchParams(window.location.search);
-    const tokenQuery =  queryParams.get("t");
-    console.log(tokenPass);
-    const songs = tokenQuery !== null ? await getLinks(tokenQuery, tokenPass) : undefined;
-    const current = tokenQuery !== null ? await getCurrentSong(tokenQuery, tokenPass) : undefined;
+    const tokenQuery =  new URL(request.url).searchParams.get('t');
+    console.log(tokenQuery);
+    let songs, current;
+    if (tokenQuery !== null) {
+        songs =  await getLinks(tokenQuery, tokenPass);
+        current =  await getCurrentSong(tokenQuery, tokenPass);
+    }
+    
     return {tokenPass, tokenQuery, songs, current}
+
+    async function getLinks(token, tokenPass) {
+        const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
+        return await resp.json();
+    }
+ 
+    async function getCurrentSong(token, tokenPass) {
+        const resp = await fetch("http://localhost:13532/tracks/current/get?token=" + token + "&pass=" + tokenPass);
+        return await resp.json();
+    }
 }
 
 export default function PlayerSection() {
@@ -82,6 +96,8 @@ export default function PlayerSection() {
     function setTokenInp(e) {
         setToken(e.target.value);
     }
+
+    console.log(tokenQuery);
 
     return (tokenQuery === null ? (<ModalContent>
         <Modal>
@@ -93,18 +109,10 @@ export default function PlayerSection() {
     (<Player musiclist={songs}></Player>))
 }
 
-async function getLinks(token, tokenPass) {
-    const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
-    return await resp.json();
-}
-
-async function getCurrentSong(token, tokenPass) {
-    const resp = await fetch("http://localhost:13532/tracks/current/get?token=" + token + "&pass=" + tokenPass);
-    return await resp.json();
-}
-
 function Player(props) {
     const [musiclist, setMusicList] = useState(props.musiclist);
+    const [musicProgress, setProgress] = useState(0);
+    const {tokenPass, tokenQuery} = useLoaderData();
 
     const data = musiclist.map(music => {return <Music
         key={music.id}
@@ -113,12 +121,19 @@ function Player(props) {
         length={music.length}
         url={music.url}
         request={music.request}
-         />})
+         />});
+
+    const websockets = new Websocket("ws://192.168.2.149:9000", tokenQuery, tokenPass, setTime);
+
+    function setTime(progress) {
+        console.log(progress);
+        setProgress(progress);
+    }
 
     return <>
         <Root>
             <PlayerControls>
-
+                {musicProgress}
             </PlayerControls>
             <MusicList>
                 {data}

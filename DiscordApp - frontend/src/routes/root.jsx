@@ -38,17 +38,6 @@ const Main = styled.div`
     height: calc(100vh - 100px);`;
 
 export default function Root() {
-    function startWS() {
-        const webSocket 
-
-        webSocket.addEventListener("open", () => {
-            
-            console.log('подключился');
-        });
-
-        
-    }
-
     return (
         <RootDiv>
             <Header>
@@ -63,7 +52,6 @@ export default function Root() {
                 </HeaderContent>
             </Header>
             <Main>
-                <button onClick={startWS}/>
                 <Outlet />
             </Main>
         </RootDiv>
