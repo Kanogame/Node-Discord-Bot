@@ -5,6 +5,7 @@ class Websocket {
         this.url = url;
         this.ws = new WebSocket(url); //"ws://192.168.2.149:9000"
         this.setWS(this.ws);
+        this.progress = 0;
     }
 
     setWS(ws) {
@@ -18,7 +19,10 @@ class Websocket {
     }
 
     messageTypeManager(event) {
-        event.data
+        const message = event.data;
+        if (message.type === "time") {
+            
+        }
     }
 
 

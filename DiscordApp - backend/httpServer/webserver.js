@@ -10,6 +10,17 @@ class WebSocketServer {
         this.setServer();
     }
 
+    messageBuilder(type, payload) {
+        return {
+            type: type,
+            payload: {...payload},
+        }
+    }
+
+    sendMessage(wsClient, data) {
+        wsClient.send(JSON.stringify(data));
+    }
+
     setServer() {
         this.WsServer.on("connection", this.onConnect);
     }
@@ -19,10 +30,10 @@ class WebSocketServer {
             const message = JSON.parse(messageStr);
             if (message.type === "init") {
                 if (this.verifyUser(message.payload)) {
-                    wsClient.send(JSON.stringify({type: "success"}));
+                    this.sendMessage(wsClient, this.messageBuilder("success"));
                     this.newMusicConnection(message.payload, wsClient);
                 } else {
-                    wsClient.send(JSON.stringify({type: "error", payload: {error: "no server with this token or token expired"}}));
+                    this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
                 }
             }
         });
@@ -40,7 +51,7 @@ class WebSocketServer {
         const guildid = getGuild(data.token, data.password);
         const timeline = useTimeline(guildid);
         let inteval = setInterval(() => {
-            wsClient.send(JSON.stringify({type: "time", payload: {progress: timeline.timestamp.progress}}));
+            wsClient.send(JSON.stringify(this.messageBuilder("time", {progress: timeline.timestamp.progress})));
         }, 1000);
     }
 }
