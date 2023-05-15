@@ -31,14 +31,18 @@ app.get("/tracks/get", async (req, res) => {
 app.get("/tracks/current/get", async (req, res) => {
     const guildid = await axios.getGuild(req.query.token,  req.query.pass);
     const History = useHistory(guildid);
-    const track = History.currentTrack;
-    const ResOBj = {
-        title: track.title,
-        length: track.duration,
-        url: track.url,
-        request: track.requestedBy,
-    };
-    res.json(track);
+    try {
+        const track = History.currentTrack;
+        const ResOBj = {
+            title: track.title,
+            length: track.duration,
+            url: track.url,
+            request: track.requestedBy,
+        };
+        res.json(track);
+    } catch (e) {
+        res.json({error: e});
+    }
 });
 
 function getServerStatus() {

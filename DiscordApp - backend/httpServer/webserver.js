@@ -25,18 +25,20 @@ class WebSocketServer {
         this.WsServer.on("connection", this.onConnect);
     }
 
-    onConnect(wsClient) {  
-        wsClient.on("message", (messageStr, wsClient) => {
-            const message = JSON.parse(messageStr);
-            if (message.type === "init") {
-                if (this.verifyUser(message.payload)) {
-                    this.sendMessage(wsClient, this.messageBuilder("success"));
-                    this.newMusicConnection(message.payload, wsClient);
-                } else {
-                    this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
-                }
+    onConnect(wsClient) {
+        wsClient.on("message", (messageStr, wsClient) => {});
+    }
+
+    onMessage(messageStr) {
+        const message = JSON.parse(messageStr);
+        if (message.type === "init") {
+            if (this.verifyUser(message.payload)) {
+                this.sendMessage(wsClient, this.messageBuilder("init", {success: true}));
+                this.newMusicConnection(message.payload, wsClient);
+            } else {
+                this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
             }
-        });
+        }
     }
 
     verifyUser(data) {

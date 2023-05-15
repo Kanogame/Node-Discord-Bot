@@ -28,7 +28,7 @@ module.exports= {
         });
 
         if (interaction.options.getSubcommand() === "song") {
-            if (music.isCurrent()) {
+            if (!music.isCurrent()) {
                 const {token, password} = createNewToken();
                 interaction.followUp(`http://localhost:3000/player/${password}`);
                 interaction.followUp(token);
