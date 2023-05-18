@@ -3,7 +3,6 @@ package DatabaseHandler
 import (
 	"bufio"
 	"database/sql"
-	"fmt"
 	"os"
 
 	_ "github.com/lib/pq"
@@ -20,7 +19,6 @@ func CreateNewConnection() *sql.DB {
 	for scanner.Scan() {
 		textFile = scanner.Text()
 	}
-	fmt.Println(textFile)
 	db, err := sql.Open("postgres", textFile)
 	if err != nil {
 		panic(err)
