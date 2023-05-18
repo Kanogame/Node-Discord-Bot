@@ -4,7 +4,6 @@ const { url } = require("../config.json");
 module.exports = {newToken, getToken, deleteToken, getGuild}
 
 async function newToken(token, password, guildId) {
-    console.log("newToken");
     const data = { 
         Token: token, 
         Password: password, 
@@ -20,7 +19,6 @@ async function newToken(token, password, guildId) {
 }
 
 async function getGuild(token, password) {
-    console.log("getGuild");
     const data = { 
         Token: token, 
         Password: password

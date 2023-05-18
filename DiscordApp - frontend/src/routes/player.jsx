@@ -54,6 +54,7 @@ const ModalButton = styled.a`
     }`;
 
 const PlayerControls = styled.div`
+    padding: 10px;
     flex: 2 1 0;
     background: linear-gradient(0deg, rgba(252,255,147,1) 0%, rgba(250,255,73,1) 25%, rgba(255,196,85,1) 100%);`;
 
@@ -65,10 +66,19 @@ const Root = styled.div`
     display: flex;
     height: 100%;`;
 
+const ProcentageContainer = styled.div`
+    background: black;
+    height: 25px;
+`
+
+const ProcentageBar = styled.div`
+    height: 100%;
+    background: Red;
+`
+
 export async function loader({request, params}) {
     const tokenPass = params.tokenPass;
     const tokenQuery =  new URL(request.url).searchParams.get('t');
-    console.log(tokenQuery);
     let songs, current, timeline;
     if (tokenQuery !== null) {
         songs =  await getLinks(tokenQuery, tokenPass);
@@ -131,7 +141,9 @@ function Player(props) {
     return <>
         <Root>
             <PlayerControls>
-                {musicProgress}
+                <ProcentageContainer>
+                    <ProcentageBar style={{width: `${musicProgress}%`}}/>
+                </ProcentageContainer>
             </PlayerControls>
             <MusicList>
                 

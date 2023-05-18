@@ -54,6 +54,7 @@ class WebSocketServer {
 
     async newMusicConnection(data, wsClient) {
         const guildid = await axios.getGuild(data.token, data.password);
+        console.log(guildid);
         const timeline = useTimeline(guildid);
         let interval = setInterval(() => {
             wsClient.send(JSON.stringify(this.messageBuilder("time", {progress: timeline.timestamp.progress})));
