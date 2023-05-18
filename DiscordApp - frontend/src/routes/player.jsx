@@ -67,16 +67,16 @@ const Root = styled.div`
 
 export async function loader({request, params}) {
     const tokenPass = params.tokenPass;
-
     const tokenQuery =  new URL(request.url).searchParams.get('t');
     console.log(tokenQuery);
-    let songs, current;
+    let songs, current, timeline;
     if (tokenQuery !== null) {
         songs =  await getLinks(tokenQuery, tokenPass);
         current =  await getCurrentSong(tokenQuery, tokenPass);
+        timeline = new Websocket("ws://192.168.2.149:9000", tokenQuery, tokenPass);
     }
     
-    return {tokenPass, tokenQuery, songs, current}
+    return {tokenPass, tokenQuery, songs, current, timeline}
 
     async function getLinks(token, tokenPass) {
         const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
@@ -92,27 +92,32 @@ export async function loader({request, params}) {
 export default function PlayerSection() {
     const [token, setToken] = useState("");
     const {tokenPass, tokenQuery, songs} = useLoaderData();
+    const isModal = tokenQuery == null;
 
     function setTokenInp(e) {
         setToken(e.target.value);
     }
-
-    console.log(tokenQuery);
-
-    return (tokenQuery === null ? (<ModalContent>
+        
+    return (isModal ? <ModalContent>
         <Modal>
             <ModalHead>Введите токен:</ModalHead>
             <ModalInput type="text" placeholder="20-ти значный токен" value={token} onChange={setTokenInp} />
             <ModalButton><NavLink to={`/player/${tokenPass}?t=${token}`}>Готово</NavLink></ModalButton>
         </Modal>
-    </ModalContent>) : 
-    (<Player musiclist={songs}></Player>))
+    </ModalContent> : <Player musiclist={songs}></Player>)
 }
 
 function Player(props) {
     const [musiclist, setMusicList] = useState(props.musiclist);
     const [musicProgress, setProgress] = useState(0);
-    const {tokenPass, tokenQuery} = useLoaderData();
+    const {timeline} = useLoaderData();
+
+    useEffect(() => {
+        const dispose = timeline.subscribe((progress) => {
+            setProgress(progress)
+        });
+        return dispose();
+    })
 
     /*const data = musiclist.map(music => {return <Music
         key={music.id}
@@ -122,13 +127,6 @@ function Player(props) {
         url={music.url}
         request={music.request}
          />});*/
-
-    const websockets = new Websocket("ws://192.168.2.149:9000", tokenQuery, tokenPass, setTime);
-
-    function setTime(progress) {
-        console.log(progress);
-        setProgress(progress);
-    }
 
     return <>
         <Root>
