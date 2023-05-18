@@ -20,6 +20,7 @@ async function newToken(token, password, guildId) {
 }
 
 async function getGuild(token, password) {
+    console.log("getGuild");
     const data = { 
         Token: token, 
         Password: password

@@ -22,6 +22,7 @@ func GetQueueByToken(db *sql.DB, user utils.User) int {
 			panic(err)
 		}
 	}
+	queryRes.Close()
 
 	if res[1] == user.Password {
 		return 0

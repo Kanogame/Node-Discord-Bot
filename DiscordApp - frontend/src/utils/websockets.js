@@ -11,7 +11,7 @@ export default class Websocket {
 
     setWS(ws) {
         ws.addEventListener("open", (event) => {this.open(event, this.ws)})
-        ws.addEventListener("message", this.messageTypeManager);
+        ws.addEventListener("message", (event) => {this.messageTypeManager(event)});
     }
 
     open(event, ws) {
@@ -19,8 +19,9 @@ export default class Websocket {
         ws.send(JSON.stringify(data));
     }
 
-    messageTypeManager(event) {
-        const message = event.data;
+    messageTypeManager = (event) => {
+        const message = JSON.parse(event.data);
+        console.log(message);
         if (message.type === "init") {
             if (message.payload.success === true) {
                 console.log("success"); //TODO

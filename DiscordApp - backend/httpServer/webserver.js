@@ -1,4 +1,5 @@
 const { useTimeline } = require("discord-player");
+const axios = require("./axiosRequests");
 const WebSocket = require("ws");
 const Music = require("../utils/Music");
 
@@ -26,13 +27,14 @@ class WebSocketServer {
     }
 
     onConnect = (wsClient) => {
-        wsClient.on("message", (messageStr, wsClient) => {this.onMessage(messageStr, wsClient)});
+        wsClient.on("message", (messageStr) => {this.onMessage(messageStr, wsClient)});
     }
 
-    onMessage = (messageStr) => {
+    onMessage = (messageStr, wsClient) => {
         const message = JSON.parse(messageStr);
         if (message.type === "init") {
             if (this.verifyUser(message.payload)) {
+                console.log(message);
                 this.sendMessage(wsClient, this.messageBuilder("init", {success: true}));
                 this.newMusicConnection(message.payload, wsClient);
             } else {
@@ -42,17 +44,18 @@ class WebSocketServer {
     }
 
     verifyUser(data) {
-        try  {getGuild(data.token, data.password);}
+        try  {axios.getGuild(data.token, data.password);}
         catch (e) {
+            console.log(e)
             return false
         }
         return true
     }
 
-    newMusicConnection(data, wsClient) {
-        const guildid = getGuild(data.token, data.password);
+    async newMusicConnection(data, wsClient) {
+        const guildid = await axios.getGuild(data.token, data.password);
         const timeline = useTimeline(guildid);
-        let inteval = setInterval(() => {
+        let interval = setInterval(() => {
             wsClient.send(JSON.stringify(this.messageBuilder("time", {progress: timeline.timestamp.progress})));
         }, 1000);
     }

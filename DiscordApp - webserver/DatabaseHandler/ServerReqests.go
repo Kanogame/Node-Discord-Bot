@@ -32,6 +32,7 @@ func GetGuildId(db *sql.DB, data utils.GetGuildJSON) string {
 			panic(err)
 		}
 	}
+	queryRes.Close()
 	if pass != data.Password {
 		fmt.Println("$" + pass + "$")
 		fmt.Println("$" + data.Password + "$")
@@ -54,23 +55,25 @@ func GetTokenByGuild(db *sql.DB, guild string) string {
 			panic(err)
 		}
 	}
+	queryRes.Close()
 
 	return token
 }
 
 func RemoveToken(db *sql.DB, guildId string) bool {
 	fmt.Println(guildId)
-	res, err := db.Query("SELECT id FROM SessionTable WHERE guildid = $1", guildId)
+	queryRes, err := db.Query("SELECT id FROM SessionTable WHERE guildid = $1", guildId)
 	if err != nil {
 		panic(err)
 	}
 
 	var id string
 
-	for res.Next() {
-		err := res.Scan(&id)
+	for queryRes.Next() {
+		err := queryRes.Scan(&id)
 		utils.ClientErrorHandler(err)
 	}
+	queryRes.Close()
 
 	fmt.Println(id)
 

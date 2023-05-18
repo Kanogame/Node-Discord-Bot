@@ -114,14 +114,14 @@ function Player(props) {
     const [musicProgress, setProgress] = useState(0);
     const {tokenPass, tokenQuery} = useLoaderData();
 
-    const data = musiclist.map(music => {return <Music
+    /*const data = musiclist.map(music => {return <Music
         key={music.id}
         id={music.id}
         title={music.title}
         length={music.length}
         url={music.url}
         request={music.request}
-         />});
+         />});*/
 
     const websockets = new Websocket("ws://192.168.2.149:9000", tokenQuery, tokenPass, setTime);
 
@@ -136,7 +136,7 @@ function Player(props) {
                 {musicProgress}
             </PlayerControls>
             <MusicList>
-                {data}
+                
             </MusicList>
         </Root>
     </>
