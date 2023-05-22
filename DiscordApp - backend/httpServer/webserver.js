@@ -41,6 +41,13 @@ class WebSocketServer {
                 this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
             }
         }
+        else if (message.type === "pause") {
+            if (this.isPlaying(this.Clients.get(message.payload.token))) {
+                const timeline = useTimeline(this.Clients.get(message.payload.token));
+                timeline.paused ? timeline.resume() : timeline.pause();
+                this.sendMessage(wsClient, this.messageBuilder("pause", {success: true}));
+            }
+        }
     } 
 
     isPlaying(guildId) {
