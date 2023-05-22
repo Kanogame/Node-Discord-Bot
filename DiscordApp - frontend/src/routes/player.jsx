@@ -1,8 +1,10 @@
-import { useLoaderData, NavLink, useSearchParams } from "react-router-dom";
+import { useLoaderData, NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Music from "../components/music";
 import Websocket from "../utils/websockets";
+import {ReactComponent as AddLogo} from '../images/plus-circle.svg';
+import {ReactComponent as NextLogo} from '../images/skip-end-circle.svg';
+import {ReactComponent as PlayLogo} from '../images/play-circle.svg';
 
 const ModalContent = styled.div`
     display: flex;
@@ -75,6 +77,18 @@ const ProcentageBar = styled.div`
     height: 100%;
     background: Red;
 `
+const ControlsContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const Add = styled.button`
+display:flex;
+background: none;
+border: none;`;
+const Next = Add;
+const Pause = Add;
 
 export async function loader({request, params}) {
     const tokenPass = params.tokenPass;
@@ -146,6 +160,11 @@ function Player(props) {
                 <ProcentageContainer>
                     <ProcentageBar style={{width: `${musicProgress}%`}}/>
                 </ProcentageContainer>
+                <ControlsContainer>
+                    <Add> <AddLogo /></Add>
+                    <Pause> <PlayLogo /></Pause>
+                    <Next><NextLogo /></Next>
+                </ControlsContainer>
             </PlayerControls>
             <MusicList>
                 
