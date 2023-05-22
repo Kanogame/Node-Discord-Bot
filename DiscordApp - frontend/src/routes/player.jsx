@@ -167,7 +167,7 @@ function Player(props) {
                 </ControlsContainer>
             </PlayerControls>
             <MusicList>
-                
+                {musiclist}
             </MusicList>
         </Root>
     </>
