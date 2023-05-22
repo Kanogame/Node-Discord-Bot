@@ -32,23 +32,19 @@ class WebSocketServer {
 
     onMessage = (messageStr, wsClient) => {
         const message = JSON.parse(messageStr);
-        switch(message.type) {
-            case "type":
-                if (this.verifyUser(message.payload)) {
-                    this.Clients.set(message.payload.token, async () => { return await axios.getGuild(data.token, data.password)})
-                    this.sendMessage(wsClient, this.messageBuilder("init", {success: true}));
-                    this.newMusicConnection(message.payload, wsClient, this.Clients.get(message.payload.token));
-                } else {
-                    this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
-                } break
-            case "pause":
-                if (this.isPlaying(this.Clients.get(message.payload.token))) {
-                }
-        } 
-    }
+        if (message.type === "init") {
+            if (this.verifyUser(message.payload)) {
+                this.Clients.set(message.payload.token, async () => { return await axios.getGuild(data.token, data.password)})
+                this.sendMessage(wsClient, this.messageBuilder("init", {success: true}));
+                this.newMusicConnection(message.payload, wsClient, this.Clients.get(message.payload.token));
+            } else {
+                this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
+            }
+        }
+    } 
 
     isPlaying(guildId) {
-        try { const timeline = useTimeline(axios.getGuild(data.token, data.password));
+        try { const timeline = useTimeline(guildId);
         timeline.timestamp
         } catch (e) {
             return false
@@ -56,10 +52,11 @@ class WebSocketServer {
         return true
     }
 
-    verifyUser(data) {
+    verifyUser = async (data) =>  {
         try  {
-            const timeline = useTimeline(axios.getGuild(data.token, data.password));
-            timeline.timestamp
+            const guild =await axios.getGuild(data.token, data.password);
+            const timeline = useTimeline(guild);
+            timeline.timestamp;
         } catch (e) {
             return false
         }

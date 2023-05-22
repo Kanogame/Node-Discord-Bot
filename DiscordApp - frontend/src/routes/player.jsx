@@ -122,12 +122,14 @@ function Player(props) {
     const [musicProgress, setProgress] = useState(0);
     const {timeline} = useLoaderData();
 
+
     useEffect(() => {
         const dispose = timeline.subscribe((progress) => {
             setProgress(progress)
+            console.log(progress)
         });
         return dispose();
-    })
+    }, [])
 
     /*const data = musiclist.map(music => {return <Music
         key={music.id}

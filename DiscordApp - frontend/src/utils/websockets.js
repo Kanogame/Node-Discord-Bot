@@ -16,6 +16,7 @@ export default class Websocket {
 
     open(event, ws) {
         const data = { type: "init", payload: {token: this.token, password: this.password}};
+        console.log(data)
         ws.send(JSON.stringify(data));
     }
 
@@ -23,12 +24,14 @@ export default class Websocket {
         const message = JSON.parse(event.data);
         console.log(message);
         if (message.type === "init") {
+            console.log(message)
             if (message.payload.success === true) {
                 console.log("success"); //TODO
             }
         } else if (message.type === "time") {
-            console.log(this.subscribed)
+            console.log(message)
             for (const func of this.subscribed) {
+                console.log(func);
                 func(message.payload.progress);
             }
         }
