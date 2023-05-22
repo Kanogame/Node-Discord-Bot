@@ -32,29 +32,42 @@ class WebSocketServer {
 
     onMessage = (messageStr, wsClient) => {
         const message = JSON.parse(messageStr);
-        if (message.type === "init") {
-            if (this.verifyUser(message.payload)) {
-                console.log(message);
-                this.sendMessage(wsClient, this.messageBuilder("init", {success: true}));
-                this.newMusicConnection(message.payload, wsClient);
-            } else {
-                this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
-            }
-        }
+        switch(message.type) {
+            case "type":
+                if (this.verifyUser(message.payload)) {
+                    this.Clients.set(message.payload.token, async () => { return await axios.getGuild(data.token, data.password)})
+                    this.sendMessage(wsClient, this.messageBuilder("init", {success: true}));
+                    this.newMusicConnection(message.payload, wsClient, this.Clients.get(message.payload.token));
+                } else {
+                    this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
+                } break
+            case "pause":
+                if (this.isPlaying(this.Clients.get(message.payload.token))) {
+                }
+        } 
     }
 
-    verifyUser(data) {
-        try  {axios.getGuild(data.token, data.password);}
-        catch (e) {
-            console.log(e)
+    isPlaying(guildId) {
+        try { const timeline = useTimeline(axios.getGuild(data.token, data.password));
+        timeline.timestamp
+        } catch (e) {
             return false
         }
         return true
     }
 
-    async newMusicConnection(data, wsClient) {
+    verifyUser(data) {
+        try  {
+            const timeline = useTimeline(axios.getGuild(data.token, data.password));
+            timeline.timestamp
+        } catch (e) {
+            return false
+        }
+        return true
+    }
+
+    async newMusicConnection(data, wsClient, guildId) {
         const guildid = await axios.getGuild(data.token, data.password);
-        console.log(guildid);
         const timeline = useTimeline(guildid);
         let interval = setInterval(() => {
             wsClient.send(JSON.stringify(this.messageBuilder("time", {progress: timeline.timestamp.progress})));
