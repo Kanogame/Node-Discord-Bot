@@ -48,7 +48,11 @@ export default class Websocket {
     }
 
     sendPause() {
-        this.sendMessage(this.ws, this.messageBuilder("pause", null))
+        this.sendMessage(this.ws, this.messageBuilder("pause", {token: this.token}))
+    }
+
+    sentSkip() {
+        this.sendMessage(this.ws, this.messageBuilder("skip", {token: this.token}))
     }
 
     timeSubscribe(setTime) {
