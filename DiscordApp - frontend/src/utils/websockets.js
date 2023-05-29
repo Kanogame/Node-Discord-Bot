@@ -14,27 +14,38 @@ export default class Websocket {
         ws.addEventListener("message", (event) => {this.messageTypeManager(event)});
     }
 
-    open(event, ws) {
-        const data = { type: "init", payload: {token: this.token, password: this.password}};
-        console.log(data)
-        ws.send(JSON.stringify(data));
+    messageBuilder(type, payload) {
+        return {
+            type: type,
+            payload: payload,
+        }
+    }
+
+    sendMessage(ws, message) {
+        ws.send(JSON.stringify(message));
+    }
+
+    open = (event, ws) => {
+        this.sendMessage(ws, this.messageBuilder("init", {token: this.token, password: this.password}));
     }
 
     messageTypeManager = (event) => {
         const message = JSON.parse(event.data);
-        console.log(message);
         if (message.type === "init") {
-            console.log(message)
             if (message.payload.success === true) {
                 console.log("success"); //TODO
             }
         } else if (message.type === "time") {
-            console.log(message)
             for (const func of this.subscribed) {
-                console.log(func);
                 func(message.payload.progress);
             }
-        }
+        } else if (message.type === "pause") {
+            
+        } 
+    }
+
+    sendPause() {
+        this.sendMessage(this.ws, this.messageBuilder("pause", null))
     }
 
     subscribe(setTime) {
