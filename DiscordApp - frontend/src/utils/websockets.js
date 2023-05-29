@@ -6,7 +6,8 @@ export default class Websocket {
         this.ws = new WebSocket(url); //"ws://192.168.2.149:9000"
         this.setWS(this.ws);
         this.progress = 0;
-        this.subscribed = []
+        this.timeSubscribed = [];
+        this.pauseSubscribed = [];
     }
 
     setWS(ws) {
@@ -36,11 +37,13 @@ export default class Websocket {
                 console.log("success"); //TODO
             }
         } else if (message.type === "time") {
-            for (const func of this.subscribed) {
+            for (const func of this.timeSubscribed) {
                 func(message.payload.progress);
             }
         } else if (message.type === "pause") {
-            
+            for (const func of this.pauseSubscribed) {
+                func(message.payload.isPlaying);
+            }
         } 
     }
 
@@ -48,10 +51,18 @@ export default class Websocket {
         this.sendMessage(this.ws, this.messageBuilder("pause", null))
     }
 
-    subscribe(setTime) {
-        this.subscribed.push(setTime)
+    timeSubscribe(setTime) {
+        this.timeSubscribed.push(setTime)
         return(() => {
-            const index = this.subscribed.indexOf(setTime);
+            const index = this.timeSubscribed.indexOf(setTime);
+            this.timeSubscribed = this.timeSubscribed.splice(index, 1);
+        })
+    }
+
+    pauseSubscribe(setPause) {
+        this.subscribed.push(setPause)
+        return(() => {
+            const index = this.subscribed.indexOf(setPause);
             this.subscribed = this.subscribed.splice(index, 1);
         })
     }

@@ -134,16 +134,28 @@ export default function PlayerSection() {
 function Player(props) {
     const [musiclist, setMusicList] = useState(props.musiclist);
     const [musicProgress, setProgress] = useState(0);
+    const [isPlaying, setPlaying] = useState(true);
     const {timeline} = useLoaderData();
 
 
     useEffect(() => {
-        const dispose = timeline.subscribe((progress) => {
+        const dispose = timeline.timeSubscribe((progress) => {
             setProgress(progress)
             console.log(progress)
         });
         return dispose();
     }, [])
+
+    useEffect(() => {
+        const dispose = timeline.pauseSubscribe((pause) => {
+            setPlaying(pause);
+        });
+        return dispose();
+    }, [])
+
+    function sendPause() {
+
+    }
 
     /*const data = musiclist.map(music => {return <Music
         key={music.id}
@@ -162,7 +174,7 @@ function Player(props) {
                 </ProcentageContainer>
                 <ControlsContainer>
                     <Add> <AddLogo /></Add>
-                    <Pause> <PlayLogo /></Pause>
+                    <Pause onClick={sendPause}> <PlayLogo /></Pause>
                     <Next><NextLogo /></Next>
                 </ControlsContainer>
             </PlayerControls>
