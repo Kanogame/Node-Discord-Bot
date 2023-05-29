@@ -1,4 +1,4 @@
-import { useLoaderData, NavLink } from "react-router-dom";
+import { useLoaderData, NavLink, useRevalidator } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Websocket from "../utils/websockets";
@@ -113,13 +113,30 @@ export async function loader({request, params}) {
     }
 }
 
-export default function PlayerSection() {
+export default async function PlayerSection() {
+    let revalidator = useRevalidator();
     const [token, setToken] = useState("");
-    const {tokenPass, tokenQuery, songs} = useLoaderData();
+    const {tokenPass, tokenQuery, songs, timeline} = useLoaderData();
+    const [isPlaying, setPlaying] = useState(true);
     const isModal = tokenQuery == null;
 
     function setTokenInp(e) {
         setToken(e.target.value);
+    }
+
+    function sendSkip() {
+        timeline.sendSkip();
+        revalidator.revalidate();
+    }
+
+    function sendPause() {
+        timeline.sendPause();
+        useEffect(() => {
+            const dispose = timeline.pauseSubscribe((pause) => {
+                setPlaying(pause);
+            });
+            return dispose();
+        }, []);
     }
         
     return (isModal ? <ModalContent>
@@ -128,13 +145,11 @@ export default function PlayerSection() {
             <ModalInput type="text" placeholder="20-ти значный токен" value={token} onChange={setTokenInp} />
             <ModalButton><NavLink to={`/player/${tokenPass}?t=${token}`}>Готово</NavLink></ModalButton>
         </Modal>
-    </ModalContent> : <Player musiclist={songs}></Player>)
+    </ModalContent> : <Player musiclist={songs} sendSkip={sendSkip} sendPause={sendPause}></Player>)
 }
 
 function Player(props) {
-    const [musiclist, setMusicList] = useState(props.musiclist);
     const [musicProgress, setProgress] = useState(0);
-    const [isPlaying, setPlaying] = useState(true);
     const {timeline} = useLoaderData();
 
 
@@ -144,27 +159,16 @@ function Player(props) {
             console.log(progress)
         });
         return dispose();
-    }, [])
+    }, []);
 
-    useEffect(() => {
-        const dispose = timeline.pauseSubscribe((pause) => {
-            setPlaying(pause);
-        });
-        return dispose();
-    }, [])
-
-    function sendPause() {
-
-    }
-
-    /*const data = musiclist.map(music => {return <Music
+    const data = props.musiclist.map((music) => {return <Music
         key={music.id}
         id={music.id}
         title={music.title}
         length={music.length}
         url={music.url}
         request={music.request}
-         />});*/
+        />});
 
     return <>
         <Root>
@@ -174,12 +178,12 @@ function Player(props) {
                 </ProcentageContainer>
                 <ControlsContainer>
                     <Add> <AddLogo /></Add>
-                    <Pause onClick={sendPause}> <PlayLogo /></Pause>
-                    <Next><NextLogo /></Next>
+                    <Pause onClick={props.sendPause}> <PlayLogo /></Pause>
+                    <Next onClick={props.sendSkip}><NextLogo /></Next>
                 </ControlsContainer>
             </PlayerControls>
             <MusicList>
-                {musiclist}
+                {props.musiclist}
             </MusicList>
         </Root>
     </>
