@@ -34,22 +34,22 @@ class WebSocketServer {
         const message = JSON.parse(messageStr);
         if (message.type === "init") {
             if (this.verifyUser(message.payload)) {
-                this.Clients.set(message.payload.token, await axios.getGuild(message.payload.token, message.payload.password))
                 this.sendMessage(wsClient, this.messageBuilder("init", {success: true}));
-                this.newMusicConnection(message.payload, wsClient, this.Clients.get(message.payload.token));
+                this.newMusicConnection(message.payload, wsClient);
             } else {
                 this.sendMessage(wsClient, this.messageBuilder("error", {error: "no server with this token or token expired"}));
             }
         } else if (message.type === "pause") {
             console.log("pause");
-            if (this.isPlaying(this.Clients.get(message.payload.token))) {
-                const timeline = useTimeline(this.Clients.get(message.payload.token));
+            if (this.isPlaying(this.Clients.get(message.payload.token).guild)) {
+                const timeline = useTimeline(this.Clients.get(message.payload.token).guild);
                 timeline.paused ? timeline.resume() : timeline.pause();
                 this.sendMessage(wsClient, this.messageBuilder("pause", {success: true, isPlaying: timeline.paused}));
             }
         } else if (message.type === "next") {
-            console.log("next");
-            const music = new Music(null, this.Clients.get(message.payload.token));
+            console.log(this.Clients);
+            const music = new Music(null, this.Clients.get(message.payload.token).guild);
+            //clearInterval(this.Clients.get(message.payload.token).interval);
             await music.skip();
         }
     } 
@@ -79,12 +79,13 @@ class WebSocketServer {
         return true
     }
 
-    async newMusicConnection(data, wsClient, guildId) {
+    async newMusicConnection(data, wsClient) {
         const guildid = await axios.getGuild(data.token, data.password);
         const timeline = useTimeline(guildid);
         let interval = setInterval(() => {
             wsClient.send(JSON.stringify(this.messageBuilder("time", {progress: timeline.timestamp.progress})));
         }, 1000);
+        this.Clients.set(data.token, {guild: guildid, interval: interval })
     }
 }
 

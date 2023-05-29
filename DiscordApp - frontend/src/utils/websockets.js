@@ -52,7 +52,7 @@ export default class Websocket {
     }
 
     sendSkip() {
-        this.sendMessage(this.ws, this.messageBuilder("skip", {token: this.token}))
+        this.sendMessage(this.ws, this.messageBuilder("next", {token: this.token}))
     }
 
     timeSubscribe(setTime) {
