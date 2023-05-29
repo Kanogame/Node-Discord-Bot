@@ -2,6 +2,7 @@ import { useLoaderData, NavLink, useRevalidator } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Websocket from "../utils/websockets";
+import Music from "../components/music";
 import {ReactComponent as AddLogo} from '../images/plus-circle.svg';
 import {ReactComponent as NextLogo} from '../images/skip-end-circle.svg';
 import {ReactComponent as PlayLogo} from '../images/play-circle.svg';
@@ -113,11 +114,10 @@ export async function loader({request, params}) {
     }
 }
 
-export default async function PlayerSection() {
+export default function PlayerSection() {
     let revalidator = useRevalidator();
     const [token, setToken] = useState("");
     const {tokenPass, tokenQuery, songs, timeline} = useLoaderData();
-    const [isPlaying, setPlaying] = useState(true);
     const isModal = tokenQuery == null;
 
     function setTokenInp(e) {
@@ -131,12 +131,6 @@ export default async function PlayerSection() {
 
     function sendPause() {
         timeline.sendPause();
-        useEffect(() => {
-            const dispose = timeline.pauseSubscribe((pause) => {
-                setPlaying(pause);
-            });
-            return dispose();
-        }, []);
     }
         
     return (isModal ? <ModalContent>
@@ -151,7 +145,14 @@ export default async function PlayerSection() {
 function Player(props) {
     const [musicProgress, setProgress] = useState(0);
     const {timeline} = useLoaderData();
+    const [isPlaying, setPlaying] = useState(true);
 
+    useEffect(() => {
+        const dispose = timeline.pauseSubscribe((pause) => {
+            setPlaying(pause);
+        });
+        return dispose();
+    }, []);
 
     useEffect(() => {
         const dispose = timeline.timeSubscribe((progress) => {
@@ -161,19 +162,20 @@ function Player(props) {
         return dispose();
     }, []);
 
-    const data = props.musiclist.map((music) => {return <Music
-        key={music.id}
-        id={music.id}
-        title={music.title}
-        length={music.length}
-        url={music.url}
-        request={music.request}
-        />});
+    const data = props.musiclist.map(track => <Music
+        key={track.id}
+        id={track.id}
+        title={track.title}
+        length={track.length}
+        url={track.url}
+        request={track.request}
+        />);
 
     return <>
         <Root>
             <PlayerControls>
                 <ProcentageContainer>
+                    {isPlaying}
                     <ProcentageBar style={{width: `${musicProgress}%`}}/>
                 </ProcentageContainer>
                 <ControlsContainer>

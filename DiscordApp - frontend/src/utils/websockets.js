@@ -51,7 +51,7 @@ export default class Websocket {
         this.sendMessage(this.ws, this.messageBuilder("pause", {token: this.token}))
     }
 
-    sentSkip() {
+    sendSkip() {
         this.sendMessage(this.ws, this.messageBuilder("skip", {token: this.token}))
     }
 
@@ -64,10 +64,10 @@ export default class Websocket {
     }
 
     pauseSubscribe(setPause) {
-        this.subscribed.push(setPause)
+        this.pauseSubscribed.push(setPause)
         return(() => {
-            const index = this.subscribed.indexOf(setPause);
-            this.subscribed = this.subscribed.splice(index, 1);
+            const index = this.pauseSubscribed.indexOf(setPause);
+            this.subscribed = this.pauseSubscribed.splice(index, 1);
         })
     }
 }
