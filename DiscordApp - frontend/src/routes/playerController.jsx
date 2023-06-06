@@ -65,16 +65,16 @@ export async function loader({request, params}) {
     }
     
     return {tokenPass, tokenQuery, songs, current, timeline}
+}
 
-    async function getLinks(token, tokenPass) {
-        const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
-        return await resp.json();
-    }
- 
-    async function getCurrentSong(token, tokenPass) {
-        const resp = await fetch("http://localhost:13532/tracks/current/get?token=" + token + "&pass=" + tokenPass);
-        return await resp.json();
-    }
+async function getLinks(token, tokenPass) {
+    const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
+    return await resp.json();
+}
+
+async function getCurrentSong(token, tokenPass) {
+    const resp = await fetch("http://localhost:13532/tracks/current/get?token=" + token + "&pass=" + tokenPass);
+    return await resp.json();
 }
 
 export default function PlayerSection() {
@@ -102,5 +102,5 @@ export default function PlayerSection() {
             <ModalInput type="text" placeholder="20-ти значный токен" value={token} onChange={setTokenInp} />
             <ModalButton><NavLink to={`/player/${tokenPass}?t=${token}`}>Готово</NavLink></ModalButton>
         </Modal>
-    </ModalContent> : <Player musiclist={songs} current={current} sendSkip={sendSkip} sendPause={sendPause}></Player>)
+    </ModalContent> : <Player musiclist={songs} current={current} timeline={timeline} sendSkip={sendSkip} sendPause={sendPause}></Player>)
 }

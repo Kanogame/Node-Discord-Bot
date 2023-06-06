@@ -40,6 +40,25 @@ const MusicList = styled.div`
     padding: 15px;
     flex: 5 1 0;`;
 
+const Thumbnail = styled.img`
+    width: 100%;
+`;
+
+const Title = styled.div`
+    text-align: center;
+    font-weight: 600;
+`;
+
+const Open = styled.a`
+    color: black;
+    text-decoration: none;
+    font-size: 15px;
+`;
+
+const DescContainer = styled(ControlsContainer)`
+    justify-content: space-between;
+`
+
 export default function Player(props) {
     const [musicProgress, setProgress] = useState(0);
     const [isPlaying, setPlaying] = useState(true);
@@ -67,11 +86,20 @@ export default function Player(props) {
         url={track.url}
         request={track.request}
         />);
-    console.log(props.musiclist);
+    console.log(props.current);
 
     return <>
         <Root>
             <PlayerControls>
+                <div>
+                    <Thumbnail src={props.current.thumbnail}/>
+                    <Title>{props.current.title}</Title>
+                    <DescContainer>
+                        <Open>{props.current.duration}</Open>
+                        <Open>{props.current.author}</Open>
+                        <Open href={props.current.url}>Open</Open>
+                    </DescContainer>
+                </div>
                 <ProcentageContainer>
                     {isPlaying}
                     <ProcentageBar style={{width: `${musicProgress}%`}}/>
