@@ -11,8 +11,9 @@ const Root = styled.div`
     height: 100%;`;
 
 const ProcentageContainer = styled.div`
+    margin: 15px 0;
     background: black;
-    height: 25px;
+    height: 5px;
 `
 
 const ProcentageBar = styled.div`
@@ -35,11 +36,12 @@ const Pause = Add;
 const PlayerControls = styled.div`
     padding: 10px;
     flex: 2 1 0;
-    background: linear-gradient(0deg, rgba(252,255,147,1) 0%, rgba(250,255,73,1) 25%, rgba(255,196,85,1) 100%);`;
+    background: #faff5f;`;
 
 const MusicList = styled.div`
     padding: 15px;
-    flex: 5 1 0;`;
+    flex: 5 1 0;
+    overflow-y:scroll;`;
 
 const Thumbnail = styled.img`
     width: 100%;
@@ -62,11 +64,10 @@ const DescContainer = styled(ControlsContainer)`
 
 export default function Player(props) {
     const [musicProgress, setProgress] = useState(0);
-    const [isPlaying, setPlaying] = useState(true);
+    const [isPlaying, setPlaying] = useState(false);
 
     useEffect(() => {
         const dispose = props.timeline.pauseSubscribe((pause) => {
-            console.log(pause);
             setPlaying(pause);
         });
         return dispose();
@@ -74,8 +75,7 @@ export default function Player(props) {
 
     useEffect(() => {
         const dispose = props.timeline.timeSubscribe((progress) => {
-            setProgress(progress)
-            console.log(progress)
+            setProgress(progress);
         });
         return dispose();
     }, []);

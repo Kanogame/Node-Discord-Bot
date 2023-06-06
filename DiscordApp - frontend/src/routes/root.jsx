@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React from 'react';
 import {ReactComponent as Logo} from '../images/logo.svg';
+import {ReactComponent as Github} from '../images/github.svg';
 import { Outlet } from "react-router-dom";
 
 const RootDiv = styled.div`
@@ -54,6 +55,13 @@ export default function Root() {
             <Main>
                 <Outlet />
             </Main>
+            <Header>
+                <HeaderContent>
+                    <a href="https://github.com/Kanogame/Node-Discord-Bot">
+                        <Github />
+                    </a>
+                </HeaderContent>
+            </Header>
         </RootDiv>
     )
 }
