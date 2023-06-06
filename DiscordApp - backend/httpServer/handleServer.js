@@ -55,12 +55,3 @@ async function startServer() {
         server = true;
     });
 }
-
-app.post("/player/pause", (req, res) => {
-    const data = req.body;
-    console.log(data);
-    const guild = data.guildid.slice(0, data.guildid.length - 1)
-    const timeline = useTimeline(guild);
-    timeline.paused ? timeline.resume() : timeline.pause();
-    res.json({ success: true });
-});

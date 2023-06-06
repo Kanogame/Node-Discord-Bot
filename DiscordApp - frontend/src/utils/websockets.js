@@ -33,8 +33,8 @@ export default class Websocket {
     messageTypeManager = (event) => {
         const message = JSON.parse(event.data);
         if (message.type === "init") {
-            if (message.payload.success === true) {
-                console.log("success"); //TODO
+            if (message.payload.success !== true) {
+                alert("error on initialization");
             }
         } else if (message.type === "time") {
             for (const func of this.timeSubscribed) {
@@ -67,7 +67,7 @@ export default class Websocket {
         this.pauseSubscribed.push(setPause)
         return(() => {
             const index = this.pauseSubscribed.indexOf(setPause);
-            this.subscribed = this.pauseSubscribed.splice(index, 1);
+            this.pauseSubscribed = this.pauseSubscribed.splice(index, 1);
         })
     }
 }
