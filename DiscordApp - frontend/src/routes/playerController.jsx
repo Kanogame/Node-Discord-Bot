@@ -63,18 +63,18 @@ export async function loader({request, params}) {
         current =  await getCurrentSong(tokenQuery, tokenPass);
         timeline = new Websocket("ws://192.168.2.149:9000", tokenQuery, tokenPass);
     }
+
+    async function getLinks(token, tokenPass) {
+        const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
+        return await resp.json();
+    }
+    
+    async function getCurrentSong(token, tokenPass) {
+        const resp = await fetch("http://localhost:13532/tracks/current/get?token=" + token + "&pass=" + tokenPass);
+        return await resp.json();
+    }
     
     return {tokenPass, tokenQuery, songs, current, timeline}
-}
-
-async function getLinks(token, tokenPass) {
-    const resp = await fetch("http://localhost:13532/tracks/get?token=" + token + "&pass=" + tokenPass);
-    return await resp.json();
-}
-
-async function getCurrentSong(token, tokenPass) {
-    const resp = await fetch("http://localhost:13532/tracks/current/get?token=" + token + "&pass=" + tokenPass);
-    return await resp.json();
 }
 
 export default function PlayerSection() {
