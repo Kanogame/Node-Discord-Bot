@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {ReactComponent as AddLogo} from '../images/plus-circle.svg';
 import {ReactComponent as NextLogo} from '../images/skip-end-circle.svg';
 import {ReactComponent as PlayLogo} from '../images/play-circle.svg';
+import {ReactComponent as PauseLogo} from '../images/pause-circle.svg';
 
 const Root = styled.div`
     display: flex;
@@ -65,6 +66,7 @@ export default function Player(props) {
 
     useEffect(() => {
         const dispose = props.timeline.pauseSubscribe((pause) => {
+            console.log(pause);
             setPlaying(pause);
         });
         return dispose();
@@ -86,7 +88,6 @@ export default function Player(props) {
         url={track.url}
         request={track.request}
         />);
-    console.log(props.current);
 
     return <>
         <Root>
@@ -106,7 +107,7 @@ export default function Player(props) {
                 </ProcentageContainer>
                 <ControlsContainer>
                     <Add> <AddLogo /></Add>
-                    <Pause onClick={props.sendPause}> <PlayLogo /></Pause>
+                    <Pause onClick={props.sendPause}>{isPlaying ? <PlayLogo /> : <PauseLogo />}</Pause>
                     <Next onClick={props.sendSkip}><NextLogo /></Next>
                 </ControlsContainer>
             </PlayerControls>

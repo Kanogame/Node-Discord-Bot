@@ -33,7 +33,7 @@ class WebSocketServer {
     onMessage = async (messageStr, wsClient) => {
         const message = JSON.parse(messageStr);
         if (message.type === "init") {
-            if (this.verifyUser(message.payload)) {
+            if (await this.verifyUser(message.payload)) {
                 this.sendMessage(wsClient, this.messageBuilder("init", {success: true}));
                 this.newMusicConnection(message.payload, wsClient);
             } else {
@@ -61,22 +61,23 @@ class WebSocketServer {
 
     isPlaying(guildId) {
         try { const timeline = useTimeline(guildId);
-        timeline.timestamp
+        timeline.timestamp === null;
+        return true;
         } catch (e) {
             return false
         }
-        return true
+        
     }
 
     verifyUser = async (data) =>  {
         try  {
             const guild = await axios.getGuild(data.token, data.password);
             const timeline = useTimeline(guild);
-            timeline.timestamp;
+            timeline.timestamp === null;
+            return true;
         } catch (e) {
             return false
         }
-        return true
     }
 
     async newMusicConnection(data, wsClient) {
