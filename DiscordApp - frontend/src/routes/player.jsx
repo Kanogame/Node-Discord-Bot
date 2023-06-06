@@ -170,6 +170,7 @@ function Player(props) {
         url={track.url}
         request={track.request}
         />);
+    console.log(props.musiclist);
 
     return <>
         <Root>
@@ -185,7 +186,7 @@ function Player(props) {
                 </ControlsContainer>
             </PlayerControls>
             <MusicList>
-                {props.musiclist}
+                {data}
             </MusicList>
         </Root>
     </>

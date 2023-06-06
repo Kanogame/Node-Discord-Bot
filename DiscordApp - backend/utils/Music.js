@@ -82,7 +82,7 @@ module.exports = class Music {
 
     isCurrent() {
         try {
-            return this.queue.currentTrack === null;
+            return this.history.currentTrack !== null;
         } catch (e) {
             return false;
         }
