@@ -4,7 +4,9 @@ export default function Music(props) {
     const MusicEl = styled.div`
         padding: 10px;
         color: black;
-        border: 1px solid lightgray;`;
+        border: 1px solid lightgray;
+        margin-bottom: 15px;
+    `;
 
     const MusicHead = styled.div`
         display: flex;
