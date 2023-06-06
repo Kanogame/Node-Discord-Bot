@@ -8,7 +8,8 @@ const RootDiv = styled.div`
 height: 100vh;`;
 
 const Header = styled.div`
-    width: 100%;
+    max-width: 100000px;
+    margin: 0 auto;
     padding: 0 30px;
     background: rgb(250,255,73);
     background: linear-gradient(90deg, rgba(250,255,73,1) 0%, rgba(255,196,85,1) 100%);
