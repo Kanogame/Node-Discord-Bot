@@ -37,4 +37,5 @@ func postPlayerPause(w http.ResponseWriter, r *http.Request) {
 	var success map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&success)
 	fmt.Println(success)
+	db.Close()
 }

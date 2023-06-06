@@ -29,6 +29,7 @@ func postNewPlayer(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
+	db.Close()
 	fmt.Fprintf(w, "success")
 }
 
@@ -44,6 +45,7 @@ func postGetPlayer(w http.ResponseWriter, r *http.Response) {
 	}
 	db := databaseHandler.CreateNewConnection()
 	token := databaseHandler.GetTokenByGuild(db, guildId)
+	db.Close()
 	fmt.Fprintf(w, token)
 }
 
@@ -59,6 +61,7 @@ func postRemovePlayer(w http.ResponseWriter, r *http.Request) {
 	}
 	db := databaseHandler.CreateNewConnection()
 	res := databaseHandler.RemoveToken(db, token)
+	db.Close()
 	if res {
 		fmt.Fprintf(w, "success")
 	} else {
@@ -78,6 +81,7 @@ func postGetGuild(w http.ResponseWriter, r *http.Request) {
 	}
 	db := databaseHandler.CreateNewConnection()
 	res := databaseHandler.GetGuildId(db, post)
+	db.Close()
 	var data = map[string]string{
 		"guild": res,
 	}
