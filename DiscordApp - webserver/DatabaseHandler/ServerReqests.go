@@ -60,11 +60,10 @@ func GetTokenByGuild(db *sql.DB, guild string) string {
 	return token
 }
 
-func RemoveToken(db *sql.DB, guildId string) bool {
-	fmt.Println(guildId)
-	queryRes, err := db.Query("SELECT id FROM SessionTable WHERE guildid = $1", guildId)
+func RemoveToken(db *sql.DB, token string) bool {
+	queryRes, err := db.Query("SELECT id FROM SessionTable WHERE token = $1", token)
 	if err != nil {
-		panic(err)
+		utils.ClientErrorHandler(err)
 	}
 
 	var id string
@@ -79,7 +78,32 @@ func RemoveToken(db *sql.DB, guildId string) bool {
 
 	ress, err := db.Exec("DELETE FROM SessionTable WHERE id = $1", id)
 	if err != nil {
-		panic(err)
+		utils.ClientErrorHandler(err)
+	}
+
+	fmt.Println(ress)
+	return true
+}
+
+func RemoveTokenGuild(db *sql.DB, Guild string) bool {
+	queryRes, err := db.Query("SELECT id FROM SessionTable WHERE guildid = $1", Guild)
+	if err != nil {
+		utils.ClientErrorHandler(err)
+	}
+
+	var id string
+
+	for queryRes.Next() {
+		err := queryRes.Scan(&id)
+		utils.ClientErrorHandler(err)
+	}
+	queryRes.Close()
+
+	fmt.Println(id)
+
+	ress, err := db.Exec("DELETE FROM SessionTable WHERE id = $1", id)
+	if err != nil {
+		utils.ClientErrorHandler(err)
 	}
 
 	fmt.Println(ress)

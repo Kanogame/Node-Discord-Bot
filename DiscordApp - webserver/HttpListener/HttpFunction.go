@@ -23,9 +23,10 @@ func postNewPlayer(w http.ResponseWriter, r *http.Request) {
 	err = databaseHandler.NewToken(db, post)
 	if err != nil {
 		utils.ClientErrorHandler(err)
-		databaseHandler.RemoveToken(db, post.GuildId)
+		databaseHandler.RemoveTokenGuild(db, post.GuildId)
 		err := databaseHandler.NewToken(db, post)
 		if err != nil {
+			fmt.Println(err)
 			return
 		}
 	}
@@ -33,11 +34,12 @@ func postNewPlayer(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "success")
 }
 
-func postGetPlayer(w http.ResponseWriter, r *http.Response) {
+func postGetPlayer(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(string(body))
 	var guildId string
 	err = json.Unmarshal(body, &guildId)
 	if err != nil {
@@ -54,6 +56,7 @@ func postRemovePlayer(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(body)
 	var token string
 	err = json.Unmarshal(body, &token)
 	if err != nil {

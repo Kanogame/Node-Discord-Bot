@@ -28,6 +28,8 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	} else if r.URL.Path == "/token/remove" {
 		fmt.Println("postRemovePlayer")
 		postRemovePlayer(w, r)
+	} else if r.URL.Path == "/token/get" {
+		postGetPlayer(w, r)
 	} else if r.URL.Path == "/guild/get" {
 		fmt.Println("postGetGuild")
 		postGetGuild(w, r)
