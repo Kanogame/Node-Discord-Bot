@@ -39,12 +39,7 @@ func postGetPlayer(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(body))
-	var guildId string
-	err = json.Unmarshal(body, &guildId)
-	if err != nil {
-		panic(err)
-	}
+	var guildId = string(body)
 	db := databaseHandler.CreateNewConnection()
 	token := databaseHandler.GetTokenByGuild(db, guildId)
 	db.Close()
@@ -57,11 +52,7 @@ func postRemovePlayer(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 	fmt.Println(body)
-	var token string
-	err = json.Unmarshal(body, &token)
-	if err != nil {
-		panic(err)
-	}
+	var token = string(body)
 	db := databaseHandler.CreateNewConnection()
 	res := databaseHandler.RemoveToken(db, token)
 	db.Close()

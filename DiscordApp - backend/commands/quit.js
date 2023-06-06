@@ -10,12 +10,12 @@ module.exports = {
 
     async execute(interaction) {
         const guildId = interaction.guildId;
-        const token = getToken(guildId);
-        deleteToken(token, guildId);
+        const token = await getToken(guildId);
+        await deleteToken(token);
 
         const music = new MusicApi(interaction, interaction.guildId);
 
-		if (!music.isCurrent()) {
+		if (music.isCurrent()) {
 			await music.quit();
         	await interaction.reply("quit.");
 		}

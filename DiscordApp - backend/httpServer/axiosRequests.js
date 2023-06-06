@@ -34,11 +34,12 @@ async function getGuild(token, password) {
 }
 
 async function getToken(guildId) {
-    const resp = await axios.post(url + "token/get", guildId);
+    const resp = await axios.post(url + "token/get", "" + guildId);
     return resp.data;
 }
 
 async function deleteToken(token) {
+    console.log(token);
     const resp = await axios.post(url + "token/remove", token)
     console.log(resp.data);
 }

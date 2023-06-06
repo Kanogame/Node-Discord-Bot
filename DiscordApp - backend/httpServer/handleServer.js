@@ -7,13 +7,12 @@ const { useQueue, useTimeline, useHistory } = require('discord-player');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-module.exports = {startServer, getServerStatus}
-
-let server = false;
+module.exports = {startServer}
 
 app.get("/tracks/get", async (req, res) => {
     const guildid = await axios.getGuild(req.query.token,  req.query.pass);
     const queue = useQueue(guildid);
+    console.log(guildid);
     if (queue === null) {
         res.json(null);
     } else {
@@ -45,13 +44,8 @@ app.get("/tracks/current/get", async (req, res) => {
     }
 });
 
-function getServerStatus() {
-    return server;
-}
-
 async function startServer() {
     await app.listen(13532, () => {
         console.log("Сервер запущен на порту 13532");
-        server = true;
     });
 }
