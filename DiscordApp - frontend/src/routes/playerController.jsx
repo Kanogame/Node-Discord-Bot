@@ -2,10 +2,8 @@ import { useLoaderData, NavLink, useRevalidator } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Websocket from "../utils/websockets";
-import Music from "../components/music";
-import {ReactComponent as AddLogo} from '../images/plus-circle.svg';
-import {ReactComponent as NextLogo} from '../images/skip-end-circle.svg';
-import {ReactComponent as PlayLogo} from '../images/play-circle.svg';
+import Player from "../components/player.jsx";
+
 
 const ModalContent = styled.div`
     display: flex;
@@ -56,41 +54,6 @@ const ModalButton = styled.a`
         background: #bbc020;
     }`;
 
-const PlayerControls = styled.div`
-    padding: 10px;
-    flex: 2 1 0;
-    background: linear-gradient(0deg, rgba(252,255,147,1) 0%, rgba(250,255,73,1) 25%, rgba(255,196,85,1) 100%);`;
-
-const MusicList = styled.div`
-    padding: 15px;
-    flex: 5 1 0;`;
-
-const Root = styled.div`
-    display: flex;
-    height: 100%;`;
-
-const ProcentageContainer = styled.div`
-    background: black;
-    height: 25px;
-`
-
-const ProcentageBar = styled.div`
-    height: 100%;
-    background: Red;
-`
-const ControlsContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const Add = styled.button`
-display:flex;
-background: none;
-border: none;`;
-const Next = Add;
-const Pause = Add;
-
 export async function loader({request, params}) {
     const tokenPass = params.tokenPass;
     const tokenQuery =  new URL(request.url).searchParams.get('t');
@@ -117,7 +80,7 @@ export async function loader({request, params}) {
 export default function PlayerSection() {
     let revalidator = useRevalidator();
     const [token, setToken] = useState("");
-    const {tokenPass, tokenQuery, songs, timeline} = useLoaderData();
+    const {tokenPass, tokenQuery, songs, current, timeline} = useLoaderData();
     const isModal = tokenQuery == null;
 
     function setTokenInp(e) {
@@ -139,55 +102,5 @@ export default function PlayerSection() {
             <ModalInput type="text" placeholder="20-ти значный токен" value={token} onChange={setTokenInp} />
             <ModalButton><NavLink to={`/player/${tokenPass}?t=${token}`}>Готово</NavLink></ModalButton>
         </Modal>
-    </ModalContent> : <Player musiclist={songs} sendSkip={sendSkip} sendPause={sendPause}></Player>)
-}
-
-function Player(props) {
-    const [musicProgress, setProgress] = useState(0);
-    const {timeline} = useLoaderData();
-    const [isPlaying, setPlaying] = useState(true);
-
-    useEffect(() => {
-        const dispose = timeline.pauseSubscribe((pause) => {
-            setPlaying(pause);
-        });
-        return dispose();
-    }, []);
-
-    useEffect(() => {
-        const dispose = timeline.timeSubscribe((progress) => {
-            setProgress(progress)
-            console.log(progress)
-        });
-        return dispose();
-    }, []);
-
-    const data = props.musiclist.map(track => <Music
-        key={track.id}
-        id={track.id}
-        title={track.title}
-        length={track.length}
-        url={track.url}
-        request={track.request}
-        />);
-    console.log(props.musiclist);
-
-    return <>
-        <Root>
-            <PlayerControls>
-                <ProcentageContainer>
-                    {isPlaying}
-                    <ProcentageBar style={{width: `${musicProgress}%`}}/>
-                </ProcentageContainer>
-                <ControlsContainer>
-                    <Add> <AddLogo /></Add>
-                    <Pause onClick={props.sendPause}> <PlayLogo /></Pause>
-                    <Next onClick={props.sendSkip}><NextLogo /></Next>
-                </ControlsContainer>
-            </PlayerControls>
-            <MusicList>
-                {data}
-            </MusicList>
-        </Root>
-    </>
+    </ModalContent> : <Player musiclist={songs} current={current} sendSkip={sendSkip} sendPause={sendPause}></Player>)
 }

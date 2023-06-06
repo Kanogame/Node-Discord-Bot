@@ -7,7 +7,7 @@ import {
 import "./styles.css";
 
 import Root from "./routes/root";
-import PlayerSection, {loader as playerLoader} from "./routes/player";
+import PlayerSection, {loader as playerLoader} from "./routes/playerController";
 
 const router = createBrowserRouter([
   {
